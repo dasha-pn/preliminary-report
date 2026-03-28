@@ -1,99 +1,93 @@
-% Nav2 dataflow diagram - corrected final version
-% Requires in preamble.tex:
-% \usetikzlibrary{arrows.meta,positioning,calc,backgrounds,fit}
+% Navigation state machine
+% Requires:
+% \usetikzlibrary{arrows.meta,positioning,calc}
 
 \tikzset{
   blk/.style={
-    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
-    minimum width=4.2cm, minimum height=0.95cm,
-    align=center, font=\small,
-    inner ysep=2pt
+    rectangle, draw=black, fill=white, line width=0.5pt,
+    minimum width=3.5cm, minimum height=0.85cm,
+    align=center, font=\small
   },
   arr/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, draw=black},
+  dlink/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, dashed, draw=black},
 }
 
-\begin{tikzpicture}[node distance=1.45cm and 2.55cm]
+\begin{tikzpicture}[node distance=1.8cm and 2.2cm]
 
-  %% === SENSORS COLUMN ===
-  \node[blk] (stereo) {StereoLabs ZED 2i\\[-1pt]{\scriptsize USB 3.0 - 110\textdegree$\times$70\textdegree{} FOV}};
-  \node[blk] (tof) [below=of stereo] {ToF Cameras $\times$3\\[-1pt]{\scriptsize MaixSense A010 - I2C}};
-  \node[blk] (lidar) [below=of tof] {RPLIDAR-S2\\[-1pt]{\scriptsize UART - 360\textdegree{} - 10\,Hz}};
+  %% === STATES - Row 1 ===
+  \node[blk] (idle) {IDLE\\{\scriptsize waiting for goal}};
+  \node[blk] (compute) [right=2.6cm of idle]
+    {PLAN PATH\\{\scriptsize global planner}};
+  \node[blk] (drive) [right=of compute]
+    {TRACK PATH\\{\scriptsize local control}};
 
-  %% === COSTMAP COLUMN ===
-  \node[blk] (voxel) [right=of stereo] {Voxel Layer\\[-1pt]{\scriptsize 3D grid - 0.05\,m resolution}};
-  \node[blk] (obstacle) [below=of voxel] {Obstacle Layer\\[-1pt]{\scriptsize 2D projection}};
-  \node[blk] (inflation) [below=of obstacle] {Inflation Layer\\[-1pt]{\scriptsize radius 0.15\,m}};
+  %% === STATES - Row 2 ===
+  \node[blk] (waypoint) [below=of idle]
+    {GOAL REACHED\\{\scriptsize tolerance 0.75\,m}};
+  \node[blk] (replan) [below=of compute]
+    {REPLAN\\{\scriptsize path update}};
+  \node[blk] (evasion) [below=of drive]
+    {LOCAL RECOVERY\\{\scriptsize obstacle avoidance}};
 
-  %% === NAV2 COLUMN ===
-  \node[blk] (global) [right=3.45cm of voxel] {NavFn Planner\\[-1pt]{\scriptsize Dijkstra - $<500$\,ms}};
-  \node[blk] (local) [below=of global] {DWB Controller\\[-1pt]{\scriptsize 20\,Hz - $(v,\omega)$}};
-  \node[blk] (cmdvel) [below=of local] {Motor Controllers};
+  %% === FAIL-SAFE STATE ===
+  \node[blk] (stop) [below=of replan]
+    {FAIL-SAFE STOP\\{\scriptsize no safe path}};
 
-  %% === SENSOR INPUTS ===
-  \draw[arr] (stereo.east) -- ++(0.80,0) |- (voxel.west);
-  \node[font=\scriptsize] at ($(stereo.east)!0.56!(voxel.west)+(0,0.28)$) {Depth};
+  %% === MAIN FLOW ===
+  \draw[arr] (idle.east) -- (compute.west)
+    node[midway, above=3pt, font=\scriptsize] {goal received};
 
-  \draw[arr] (tof.east) -- ++(0.80,0) |- (voxel.west);
-  \node[font=\scriptsize] at ($(tof.east)!0.56!(voxel.west)+(0,0.75)$) {Range};
+  \draw[arr] (compute.east) -- (drive.west)
+    node[midway, above, font=\scriptsize] {path valid};
 
-  \draw[arr] (lidar.east) -- ++(1.90,0) |- (obstacle.west);
-  \node[font=\scriptsize] at ($(lidar.east)+(1.10,0.28)$) {LaserScan};
+  %% === TRACK -> LOCAL RECOVERY ===
+  \draw[arr] (drive.south) -- (evasion.north);
+  \node[font=\scriptsize, left] at ($(drive.south)!0.55!(evasion.north)+(-0.35,0)$)
+    {path blocked};
 
-  %% === COSTMAP PIPELINE ===
-  \draw[arr] (voxel.south) -- (obstacle.north)
-    node[midway, right, font=\scriptsize] {voxels};
+  %% === LOCAL RECOVERY -> REPLAN ===
+  \draw[arr] (evasion.west) -- (replan.east);
+  \node[font=\scriptsize, above] at ($(evasion.west)!0.5!(replan.east)+(0,0.12)$)
+    {recovery failed};
 
-  \draw[arr] (obstacle.south) -- (inflation.north)
-    node[midway, right, font=\scriptsize] {obstacles};
+  %% === REPLAN -> COMPUTE PATH ===
+  \draw[arr] (replan.north) -- (compute.south)
+    node[midway, right, font=\scriptsize] {new plan};
 
-  %% === COSTMAP -> GLOBAL PLANNER ===
-  \coordinate (cgA) at ($(inflation.east)+(0.60,0)$);
-  \coordinate (cgB) at ($(cgA |- global.west)$);
-  \draw[arr] (inflation.east) -- (cgA) -- (cgB) -- (global.west);
-  \node[font=\scriptsize, above] at ($(cgB)!0.5!(global.west)+(0.00,0.12)$) {Costmap};
+  %% === HELPER COORDINATES ===
+  \coordinate (lefttop) at ([xshift=-0.85cm]idle.west);
+  \coordinate (leftbot) at ([xshift=-0.85cm]waypoint.west);
+  \coordinate (topline) at ([yshift=0.95cm]drive.north);
 
-  %% === COSTMAP -> LOCAL CONTROLLER ===
-  \coordinate (clA) at ($(inflation.east)+(1.05,0)$);
-  \coordinate (clB) at ($(clA |- local.west)$);
-  \draw[arr] (inflation.east) -- (clA) -- (clB) -- (local.west);
-  \node[font=\scriptsize, above] at ($(clB)!0.5!(local.west)+(-0.25,0.12)$) {Local costmap};
+  %% === TRACK -> GOAL REACHED ===
+  \draw[arr]
+    (drive.north) -- (topline)
+    -| (lefttop)
+    -- (leftbot)
+    -- (waypoint.west);
 
-  %% === GLOBAL PLAN -> LOCAL CONTROLLER ===
-  \draw[arr] (global.south) -- (local.north);
-  \node[font=\scriptsize, right, align=left]
-    at ($(global.south)!0.5!(local.north)+(0.16,0.00)$)
-    {\texttt{nav\_msgs/}\\\texttt{Path}};
+  \node[font=\scriptsize, above]
+    at ($(topline)+(-4.6cm,0)$) {position error $< 0.75\,m$};
 
-  %% === OUTPUT ===
-  \draw[arr] (local.south) -- (cmdvel.north);
-  \node[font=\scriptsize, right, align=left]
-    at ($(local.south)!0.56!(cmdvel.north)+(0.16,0.00)$)
-    {\texttt{geometry\_msgs/}\\\texttt{Twist}};
+  %% === GOAL REACHED -> IDLE ===
+  \draw[arr]
+    ([xshift=0.40cm]waypoint.north) -- ([xshift=0.40cm]idle.south);
 
-  %% === COLUMN LABELS ===
-  \node[font=\small\bfseries, above=0.55cm of stereo] {SENSOR SUITE};
-  \node[font=\small\bfseries, above=0.55cm of voxel] {COSTMAP};
-  \node[font=\small\bfseries, above=0.55cm of global] {NAV2 STACK};
+  \node[font=\scriptsize, right]
+    at ($([xshift=0.40cm]waypoint.north)!0.5!([xshift=0.40cm]idle.south)$)
+    {next goal};
 
-  %% === SECTION FRAMES ===
-  \begin{scope}[on background layer]
-    \node[
-      draw=black, fill=black!5, dashed, line width=0.8pt,
-      inner sep=8pt, rounded corners=3pt,
-      fit=(stereo)(lidar)
-    ] {};
+  %% === REPLAN -> FAIL-SAFE STOP ===
+  \draw[dlink] (replan.south) -- (stop.north)
+    node[midway, right, font=\scriptsize] {timeout};
 
-    \node[
-      draw=black, fill=black!5, dashed, line width=0.8pt,
-      inner sep=8pt, rounded corners=3pt,
-      fit=(voxel)(inflation)
-    ] {};
+  %% === LOCAL RECOVERY -> TRACK PATH ===
+  \coordinate (pc1) at ([xshift=0.65cm]evasion.east);
+  \coordinate (pc2) at ([xshift=0.65cm,yshift=1.65cm]evasion.east);
 
-    \node[
-      draw=ercblue, fill=ercblue!5, dashed, line width=0.8pt,
-      inner sep=8pt, rounded corners=3pt,
-      fit=(global)(cmdvel)
-    ] {};
-  \end{scope}
+  \draw[dlink] (evasion.east) -- (pc1) -- (pc2) -- (drive.east);
+
+  \node[font=\scriptsize, right]
+    at ($(pc1)!0.52!(pc2)+(0.20,0)$) {path clear};
 
 \end{tikzpicture}
