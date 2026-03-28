@@ -5,11 +5,11 @@
 
 The navigation subsystem performs autonomous path planning, trajectory tracking, and collision avoidance. After receiving a goal pose or waypoint sequence, the rover executes motion in a closed loop: sensor updates (\autoref{par:navigation_sensor_suite}), costmap update, global planning, local trajectory tracking, and command execution. The same stack is used for traversal and task positioning, while manipulation is handled separately (\autoref{par:arm_kinematics_motion_planning}).
 
-Global planning uses NavFn (Dijkstra) over a \qty{0.05}{\metre} resolution 2D costmap. Local motion tracks the global path while reacting in real time to terrain changes and newly detected obstacles. Collision avoidance, including other rovers (REQ-FUN-240), is enforced through obstacle detection and safety-margin inflation.
+Global planning uses NavFn (Dijkstra) over a \qty{0.05}{\metre} resolution 2D costmap. Local motion tracks the global path while reacting in real time to terrain changes and newly detected obstacles. Collision avoidance --- including dynamic hazards like other rovers is enforced through continuous obstacle detection and safety-margin inflation.
 
 The costmap integrates depth and range sensing into voxel, obstacle, and inflation layers at \qty{0.05}{\metre} resolution. Obstacles include occupied cells, terrain protrusions above \qty{0.15}{\metre}, depressions deeper than \qty{0.10}{\metre}, and cells with cost $\geq 253$. Traversability is estimated from terrain geometry, with safe regions defined by cost thresholds.
 
-If the path becomes obstructed, the navigation state machine (Figure~\ref{fig:navigation_combined}) performs local recovery, triggers global replanning if needed, or executes a fail-safe stop if no safe trajectory is found within a timeout.
+If the path becomes obstructed, the navigation state machine (\autoref{fig:navigation_combined}) performs local recovery, triggers global replanning if needed, or executes a fail-safe stop if no safe trajectory is found within a timeout.
 \begin{figure}[H]
   \centering
 
