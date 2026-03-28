@@ -1,0 +1,99 @@
+% Navigation dataflow diagram
+% Requires in preamble.tex:
+% \usetikzlibrary{arrows.meta,positioning,calc,backgrounds,fit}
+
+\tikzset{
+  blk/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=3.8cm, minimum height=0.9cm,
+    align=center, font=\small,
+    inner ysep=2pt
+  },
+  arr/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, draw=black},
+}
+
+\begin{tikzpicture}[node distance=1.35cm and 2.2cm]
+
+  %% === INPUT COLUMN ===
+  \node[blk] (stereo) {Stereo Depth};
+  \node[blk] (tof) [below=of stereo] {ToF Sensors};
+  \node[blk] (lidar) [below=of tof] {LiDAR};
+
+  %% === COSTMAP COLUMN ===
+  \node[blk] (voxel) [right=of stereo] {Voxel Layer\\[-1pt]{\scriptsize 0.05\,m resolution}};
+  \node[blk] (obstacle) [below=of voxel] {Obstacle Layer};
+  \node[blk] (inflation) [below=of obstacle] {Inflation Layer};
+
+  %% === NAVIGATION COLUMN ===
+  \node[blk] (global) [right=3.0cm of voxel] {Global Planner};
+  \node[blk] (local) [below=of global] {Local Controller};
+  \node[blk] (cmdvel) [below=of local] {Drive Command};
+
+  %% === SENSOR INPUTS ===
+  \draw[arr] (stereo.east) -- ++(0.65,0) |- (voxel.west);
+  \node[font=\scriptsize] at ($(stereo.east)!0.55!(voxel.west)+(0,0.24)$) {depth};
+
+  \draw[arr] (tof.east) -- ++(0.65,0) |- (voxel.west);
+  \node[font=\scriptsize] at ($(tof.east)!0.55!(voxel.west)+(0,0.62)$) {range};
+
+  \draw[arr] (lidar.east) -- ++(1.55,0) |- (obstacle.west);
+  \node[font=\scriptsize] at ($(lidar.east)+(0.95,0.24)$) {scan};
+
+  %% === COSTMAP PIPELINE ===
+  \draw[arr] (voxel.south) -- (obstacle.north)
+    node[midway, right, font=\scriptsize] {map update};
+
+  \draw[arr] (obstacle.south) -- (inflation.north)
+    node[midway, right, font=\scriptsize] {safety margin};
+
+  %% === COSTMAP -> GLOBAL PLANNER ===
+  \coordinate (cgA) at ($(inflation.east)+(0.52,0)$);
+  \coordinate (cgB) at ($(cgA |- global.west)$);
+  \draw[arr] (inflation.east) -- (cgA) -- (cgB) -- (global.west);
+  \node[font=\scriptsize, above] at ($(cgB)!0.5!(global.west)+(0.00,0.12)$) {costmap};
+
+  %% === COSTMAP -> LOCAL CONTROLLER ===
+  \coordinate (clA) at ($(inflation.east)+(0.88,0)$);
+  \coordinate (clB) at ($(clA |- local.west)$);
+  \draw[arr] (inflation.east) -- (clA) -- (clB) -- (local.west);
+  \node[font=\scriptsize, above] at ($(clB)!0.5!(local.west)+(-0.18,0.12)$) {local map};
+
+  %% === GLOBAL PLAN -> LOCAL CONTROLLER ===
+  \draw[arr] (global.south) -- (local.north);
+  \node[font=\scriptsize, right]
+    at ($(global.south)!0.5!(local.north)+(0.16,0.00)$)
+    {path};
+
+  %% === OUTPUT ===
+  \draw[arr] (local.south) -- (cmdvel.north);
+  \node[font=\scriptsize, right]
+    at ($(local.south)!0.56!(cmdvel.north)+(0.16,0.00)$)
+    {command};
+
+  %% === COLUMN LABELS ===
+  \node[font=\small\bfseries, above=0.50cm of stereo] {SENSING};
+  \node[font=\small\bfseries, above=0.50cm of voxel] {COSTMAP};
+  \node[font=\small\bfseries, above=0.50cm of global] {NAVIGATION};
+
+  %% === SECTION FRAMES ===
+  \begin{scope}[on background layer]
+    \node[
+      draw=black, fill=black!5, dashed, line width=0.8pt,
+      inner sep=7pt, rounded corners=3pt,
+      fit=(stereo)(lidar)
+    ] {};
+
+    \node[
+      draw=black, fill=black!5, dashed, line width=0.8pt,
+      inner sep=7pt, rounded corners=3pt,
+      fit=(voxel)(inflation)
+    ] {};
+
+    \node[
+      draw=ercblue, fill=ercblue!5, dashed, line width=0.8pt,
+      inner sep=7pt, rounded corners=3pt,
+      fit=(global)(cmdvel)
+    ] {};
+  \end{scope}
+
+\end{tikzpicture}

@@ -1,0 +1,93 @@
+% Navigation state machine
+% Requires:
+% \usetikzlibrary{arrows.meta,positioning,calc}
+
+\tikzset{
+  blk/.style={
+    rectangle, draw=black, fill=white, line width=0.5pt,
+    minimum width=3.5cm, minimum height=0.85cm,
+    align=center, font=\small
+  },
+  arr/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, draw=black},
+  dlink/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, dashed, draw=black},
+}
+
+\begin{tikzpicture}[node distance=1.8cm and 2.2cm]
+
+  %% === STATES - Row 1 ===
+  \node[blk] (idle) {IDLE\\{\scriptsize waiting for goal}};
+  \node[blk] (compute) [right=2.6cm of idle]
+    {PLAN PATH\\{\scriptsize global planner}};
+  \node[blk] (drive) [right=of compute]
+    {TRACK PATH\\{\scriptsize local control}};
+
+  %% === STATES - Row 2 ===
+  \node[blk] (waypoint) [below=of idle]
+    {GOAL REACHED\\{\scriptsize tolerance 0.75\,m}};
+  \node[blk] (replan) [below=of compute]
+    {REPLAN\\{\scriptsize path update}};
+  \node[blk] (evasion) [below=of drive]
+    {LOCAL RECOVERY\\{\scriptsize obstacle avoidance}};
+
+  %% === FAIL-SAFE STATE ===
+  \node[blk] (stop) [below=of replan]
+    {FAIL-SAFE STOP\\{\scriptsize no safe path}};
+
+  %% === MAIN FLOW ===
+  \draw[arr] (idle.east) -- (compute.west)
+    node[midway, above=3pt, font=\scriptsize] {goal received};
+
+  \draw[arr] (compute.east) -- (drive.west)
+    node[midway, above, font=\scriptsize] {path valid};
+
+  %% === TRACK -> LOCAL RECOVERY ===
+  \draw[arr] (drive.south) -- (evasion.north);
+  \node[font=\scriptsize, left] at ($(drive.south)!0.55!(evasion.north)+(-0.35,0)$)
+    {path blocked};
+
+  %% === LOCAL RECOVERY -> REPLAN ===
+  \draw[arr] (evasion.west) -- (replan.east);
+  \node[font=\scriptsize, above] at ($(evasion.west)!0.5!(replan.east)+(0,0.12)$)
+    {recovery failed};
+
+  %% === REPLAN -> COMPUTE PATH ===
+  \draw[arr] (replan.north) -- (compute.south)
+    node[midway, right, font=\scriptsize] {new plan};
+
+  %% === HELPER COORDINATES ===
+  \coordinate (lefttop) at ([xshift=-0.85cm]idle.west);
+  \coordinate (leftbot) at ([xshift=-0.85cm]waypoint.west);
+  \coordinate (topline) at ([yshift=0.95cm]drive.north);
+
+  %% === TRACK -> GOAL REACHED ===
+  \draw[arr]
+    (drive.north) -- (topline)
+    -| (lefttop)
+    -- (leftbot)
+    -- (waypoint.west);
+
+  \node[font=\scriptsize, above]
+    at ($(topline)+(-4.6cm,0)$) {position error $< 0.75\,m$};
+
+  %% === GOAL REACHED -> IDLE ===
+  \draw[arr]
+    ([xshift=0.40cm]waypoint.north) -- ([xshift=0.40cm]idle.south);
+
+  \node[font=\scriptsize, right]
+    at ($([xshift=0.40cm]waypoint.north)!0.5!([xshift=0.40cm]idle.south)$)
+    {next goal};
+
+  %% === REPLAN -> FAIL-SAFE STOP ===
+  \draw[dlink] (replan.south) -- (stop.north)
+    node[midway, right, font=\scriptsize] {timeout};
+
+  %% === LOCAL RECOVERY -> TRACK PATH ===
+  \coordinate (pc1) at ([xshift=0.65cm]evasion.east);
+  \coordinate (pc2) at ([xshift=0.65cm,yshift=1.65cm]evasion.east);
+
+  \draw[dlink] (evasion.east) -- (pc1) -- (pc2) -- (drive.east);
+
+  \node[font=\scriptsize, right]
+    at ($(pc1)!0.52!(pc2)+(0.20,0)$) {path clear};
+
+\end{tikzpicture}

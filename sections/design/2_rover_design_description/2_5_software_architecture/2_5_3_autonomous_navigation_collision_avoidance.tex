@@ -1,8 +1,28 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Navigation
+% Requirements: REQ-OPS-050, REQ-FUN-060, REQ-FUN-240
+% Status: done
 
-% Placeholder content for sections/design/2/2_5/2_5_3_autonomous_navigation_collision_avoidance.tex
+The navigation subsystem performs autonomous path planning, trajectory tracking, and collision avoidance. After receiving a goal pose or waypoint sequence, the rover executes motion in a closed loop: sensor updates (\autoref{par:navigation_sensor_suite}), costmap update, global planning, local trajectory tracking, and command execution. The same stack is used for traversal and task positioning, while manipulation is handled separately (\autoref{par:arm_kinematics_motion_planning}).
 
-[Add content for this subsection.]
+Global planning uses NavFn (Dijkstra) over a \qty{0.05}{\metre} resolution 2D costmap. Local motion tracks the global path while reacting in real time to terrain changes and newly detected obstacles. Collision avoidance --- including dynamic hazards like other rovers is enforced through continuous obstacle detection and safety-margin inflation.
+
+The costmap integrates depth and range sensing into voxel, obstacle, and inflation layers at \qty{0.05}{\metre} resolution. Obstacles include occupied cells, terrain protrusions above \qty{0.15}{\metre}, depressions deeper than \qty{0.10}{\metre}, and cells with cost $\geq 253$. Traversability is estimated from terrain geometry, with safe regions defined by cost thresholds.
+
+If the path becomes obstructed, the navigation state machine (\autoref{fig:navigation_combined}) performs local recovery, triggers global replanning if needed, or executes a fail-safe stop if no safe trajectory is found within a timeout.
+\begin{figure}[H]
+  \centering
+
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \resizebox{\linewidth}{!}{\input{teams/navigation/figures/nav2_dataflow}}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \resizebox{\linewidth}{!}{\input{teams/navigation/figures/behavior_state_machine}}
+  \end{minipage}
+
+  \caption{Navigation overview: state machine and data flow}
+  \label{fig:navigation_combined}
+\end{figure}
