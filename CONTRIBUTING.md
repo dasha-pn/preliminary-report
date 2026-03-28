@@ -87,7 +87,7 @@ git add sections/design/<chapter>/<section>/<subsection>/<file>.tex
 git commit -m "DES <subsection-id>: short title"
 
 # 4) Перший пуш нової гілки з прив'язкою remote
-git push -u origin des/<subsection-id>-<short-title>
+git push -u origin des/<subsection-id>_<short-title>
 
 # 5) Створити PR на GitHub і одразу позначити Draft
 
