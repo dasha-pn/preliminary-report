@@ -1,8 +1,14 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Science Team, Ground Station Team, Arm Team
+% Requirements: REQ-FUN-170, REQ-GEN-080, REQ-FUN-130
+% Status: in-progress
 
 % Placeholder content for sections/design/2/2_4/2_4_3_rover_camera_suite.tex
 
-[Add content for this subsection.]
+An Arducam AR0234 color global shutter USB 3.0 camera is mounted \qty{10}{\centi\metre} above the gripper, aligned parallel to its orientation to support object recognition and pose estimation. The global shutter sensor ensures blur-free imaging during dynamic arm movements. The module utilizes an M12 manual-focus lens ($f = \qty{3.6}{\milli\metre}$) delivering an \ang{82}~$\times$~\ang{66} (H$\times$V) FoV with low ($\sim$\qty{3}{\percent}) distortion.
+
+% TODO: Specify illumination module (e.g., LED floodlight/COB), beam angle (>\ang{120}), maybe power draw, and maybe PWM control
+Integrated wide-angle illumination provides consistent, shadow-free visibility of the front working area during maintenance and liquid sampling operations.
+
+
+% TODO: paragraphs for Science Team and Ground Station Team
