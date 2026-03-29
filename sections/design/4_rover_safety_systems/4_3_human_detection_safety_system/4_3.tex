@@ -3,16 +3,6 @@
 % Requirements: REQ-FUN-240
 % Status: done
 
-The system is based on HLK-LD2450 human presence sensor,
-each providing simultaneous distance and angular position measurements of detected targets.
-The sensor operates through UART communication, on \qty{5}{\volt} power, \qty{3.3}{\volt} logical voltage, with a \ang{120} field of view and detects human presence up to \qty{6}{\metre} in open environments.
-The positional accuracy is within \qty{0.1}{\metre}, enabling precise localization relative to the rover.
+The system utilizes four HLK-LD2450 human presence sensors mounted to provide full \ang{360} coverage with overlapping fields of view, eliminating blind spots. Each sensor features a \ang{120} field of view and tracks up to three moving individuals up to \qty{6}{\metre} away with a positional accuracy of \qty{0.1}{\metre}. 
 
-Each sensor can track up to three moving individuals, provided a minimum separation of approximately \qty{1}{\metre}.
-Targets closer than this threshold may be merged into a single detection.
-The radar operates independently of lighting conditions and is robust to dust and partial occlusions, ensuring reliable performance in outdoor environments.
-
-A total of four sensors are mounted to provide full \ang{360} coverage around the rover, with overlapping fields of view to eliminate blind spots.
-Sensor data is processed in real time to estimate relative position and direction of detected humans.
-
-An emergency stop is triggered when a human is detected within a predefined safety radius of \qty{4}{\metre}.
+Operating independently of lighting conditions and robust against dust and partial occlusions, the radar ensures reliable outdoor performance. The system processes data in real time to estimate the relative distance and angular position of detected targets, triggering an emergency stop if a human enters a predefined \qty{4}{\metre} safety radius.
