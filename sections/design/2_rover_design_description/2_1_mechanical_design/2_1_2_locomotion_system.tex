@@ -2,44 +2,64 @@
 % Teams: Suspension
 % Requirements: REQ-DES-130 REQ-FUN-020
 % Status: [done]
-
-% Placeholder content for sections/design/2/2_1/2_1_2_locomotion_system.tex
-
-\begin{wrapfigure}{r}{0.46\textwidth}
+\begin{wrapfigure}[16]{r}{0.48\textwidth}
 \centering
-\vspace{-1.0\baselineskip}
-\begin{tikzpicture}[scale=2.2, thick]
-  % Ground and step
-  \fill[gray!20] (-0.35,-0.18) rectangle (0,0);
-  \fill[gray!20] (0,0) rectangle (0.6,-0.02);
-  \draw[very thick] (-0.35,0) -- (0,0) -- (0,-0.18);
-  \draw[very thick] (0,0) -- (0.6,0);
+\vspace{-0.8\baselineskip}
+\begin{tikzpicture}[scale=6, >=latex]
 
-  % Wheel
-  \def\r{0.15}
-  \def\h{0.09}  % example h = 9 cm
-  \pgfmathsetmacro{\cx}{sqrt(2*\r*\h - \h*\h)}
-  \pgfmathsetmacro{\cy}{\r - \h}
-  \draw ({\cx},{\cy}) circle (\r);
+  %% ---- Parameters ----
+  \pgfmathsetmacro{\rr}{0.15}
+  \pgfmathsetmacro{\hh}{0.08}
 
-  % Geometry annotations
-  \draw[dashed,thin] ({\cx},{\cy}) -- (0,0)
-    node[midway, above left, font=\tiny] {$r$};
-  \draw[latex-latex, thin] (0,-0.17) -- ({\cx},-0.17)
-    node[midway, below, font=\tiny] {$\sqrt{2rh-h^2}$};
-  \draw[latex-latex, thin] (-0.3,0) -- (-0.3,-\h)
-    node[midway, left, font=\tiny] {$h$};
+  %% ---- Derived ----
+  \pgfmathsetmacro{\cx}{sqrt(2*\rr*\hh - \hh*\hh)}
 
-  % Force arrow
-  \draw[-latex, blue!70!black, very thick]
-    ({\cx+\r+0.05},{\cy}) -- ({\cx+\r+0.05+0.12},{\cy})
-    node[right, font=\tiny] {$F_\mathrm{step}$};
+  %% ---- Lower ground (left) ----
+  \fill[gray!20] ({-\cx-\rr-0.18}, {-0.013}) rectangle (0, 0);
+  \draw[line width=1.0pt] ({-\cx-\rr-0.18}, 0) -- (0, 0);
+
+  %% ---- Step vertical face ----
+  \draw[line width=1.0pt] (0, 0) -- (0, {\hh});
+
+  %% ---- Upper ground (right) ----
+  \fill[gray!20] (0, {\hh-0.013}) rectangle (0.38, {\hh});
+  \draw[line width=1.0pt] (0, {\hh}) -- (0.38, {\hh});
+
+  %% ---- Wheel ----
+  \draw[line width=0.7pt] ({-\cx}, {\rr}) circle (\rr);
+
+  %% ---- r: dashed line, label shifted above-left clear of circle stroke ----
+  \draw[dashed, line width=0.5pt]
+    ({-\cx}, {\rr}) -- (0, {\hh});
+  \node[font=\scriptsize] at ({-\cx*0.42}, {\rr + (\hh-\rr)*0.42 + 0.022})
+    {$r$};
+
+  %% ---- h: vertical arrow right of step face ----
+  \draw[latex-latex, line width=0.5pt]
+    (0.025, 0) -- (0.025, {\hh})
+    node[midway, right, font=\scriptsize] {$h$};
+
+  %% ---- sqrt(2rh-h^2): horizontal arrow below lower ground ----
+  \draw[latex-latex, line width=0.5pt]
+    ({-\cx}, {-0.034}) -- (0, {-0.034})
+    node[midway, below, font=\scriptsize] {$\sqrt{2rh - h^2}$};
+  \draw[line width=0.4pt] ({-\cx}, {-0.018}) -- ({-\cx}, {-0.046});
+  \draw[line width=0.4pt] (0,      {-0.018}) -- (0,      {-0.046});
+
+  %% ---- F_step arrow ----
+  \draw[->, line width=1.2pt, blue!75!black]
+    ({-\cx+\rr+0.012}, {\rr})
+    -- ({-\cx+\rr+0.09}, {\rr})
+    node[right, font=\small\bfseries] {$F_{\mathrm{step}}$};
+
 \end{tikzpicture}
-\caption{Step-climbing geometry: wheel of radius $r$ contacting
-  a step of height $h$. The required horizontal force at the axle is
-  $F_\mathrm{step} = W_\mathrm{front}\sqrt{2rh-h^2}/(r-h)$.}
+\caption{Step-climbing geometry: wheel of radius~$r$ on lower ground
+  contacts the step corner at height~$h$. The horizontal distance from
+  the wheel centre to the corner is $\sqrt{2rh-h^2}$, and the
+  required axle force is
+  $F_{\mathrm{step}} = W_{\mathrm{front}}\,r\sqrt{2rh-h^2}\,/(r-h)$.}
 \label{fig:step_geom}
-\vspace{-0.6\baselineskip}
+\vspace{-0.5\baselineskip}
 \end{wrapfigure}
 
 Drive motor selection was based on two parallel analyses.
