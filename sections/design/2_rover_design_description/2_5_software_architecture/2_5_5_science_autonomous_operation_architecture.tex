@@ -1,8 +1,26 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: science
+% Requirements: REQ-FUN-060, REQ-FUN-160
+% Status: draft
 
-% Placeholder content for sections/design/2/2_5/2_5_5_science_autonomous_operation_architecture.tex
+The science autonomous operation architecture defines ESP32-based control logic governing three independent sample acquisition workflows executed without operator intervention. A shared coordination layer arbitrates carousel access, manages inter-system CAN signalling, and logs timestamped sample metadata to the ground station.
 
-[Add content for this subsection.]
+\textbf{System Coordination and Container Management}
+
+When either the drill or mini-manipulator signals readiness above a container port, the ESP32 rotates the carousel, opens the lid, and issues a release command. Upon sample receipt, the lid closes, the load cell acquires a mass measurement, and the result is transmitted via CAN to the Jetson and forwarded to the ground station.
+
+\textbf{Sample Acquisition Workflows}
+
+The drill captures a reference photograph, advances the auger to programmed depth via Hall-effect shaft monitoring, collapses the internal petal mechanism to retain the sample, and retracts before signalling transfer readiness. The mini-manipulator uses a dedicated camera for autonomous rock detection, descends to grip the target, and lifts to the transfer position before issuing the same readiness signal. In both cases the coordination layer responds identically — rotating the carousel, opening the lid, and releasing the sample.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=\textwidth]{teams/science/figures/autonomous_workflow_sequence.png}
+    \fbox{\parbox[c][4cm][c]{0.75\textwidth}{\centering Placeholder — sequential interaction diagram}}
+    \caption{Autonomous sample acquisition: inter-subsystem signalling between drill, mini-manipulator, and container carousel}
+    \label{fig:autonomous_workflow}
+\end{figure}
+
+\textbf{Load Cell Measurement Automation}
+
+Each of the three container slots has an independent load cell channel. After lid closure, dynamic compensation filtering rejects vibration noise and the channel logs a verified mass reading. All three channels operate in parallel with cross-validation capability; the ESP32 aggregates results and transmits a consolidated verification record via CAN.
