@@ -1,8 +1,16 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Drone
+% Requirements: REQ-FUN-060, REQ-OPS-130, REQ-OPS-050
+% Status: draft
 
-% Placeholder content for sections/design/5/5_5/5_5_1_autonomous_navigation_pipeline.tex
+High-level autonomy is executed on the Raspberry Pi~5 (\qty{16}{\giga\byte} RAM), which performs mission planning, waypoint generation, and computer vision processing (\autoref{par:computer_vision_imagery}). Based on localization data and detected targets, the companion computer generates position setpoints and task commands.
 
-[Add content for this subsection.]
+Low-level flight control is handled by the Pixhawk~6C running ArduPilot, which executes stabilization, attitude control, and motor actuation. The Pixhawk receives high-level setpoints from the Raspberry Pi via a MAVLink interface and ensures precise trajectory tracking and dynamic stability.
+
+The system operates fully autonomously during the Droning Sub-Task, executing navigation, target detection, and task logic without reliance on operator visual feedback. The Ground Control Station is limited to mission supervision and command initiation, with no manual piloting or real-time visual guidance required during execution.
+
+To prevent unintended behavior, command execution follows a controlled state machine with gating mechanisms and safety checks, including the mandatory pre-motion delay (\autoref{par:pre_motion_5s_delay}).
+
+Validation of autonomous operation is performed through a series of system-level tests. These include full mission execution trials in a controlled environment, where the UAV autonomously follows predefined trajectories, detects markers, and completes tasks without operator intervention. Performance metrics such as trajectory accuracy, task completion rate, and system stability are recorded and evaluated to verify compliance with requirements.
+
+This architecture ensures reliable and repeatable autonomous operation, enabling complete mission execution under competition conditions without external control input.
