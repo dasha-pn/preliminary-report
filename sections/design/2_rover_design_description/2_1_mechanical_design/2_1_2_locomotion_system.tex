@@ -5,4 +5,118 @@
 
 % Placeholder content for sections/design/2/2_1/2_1_2_locomotion_system.tex
 
-[Add content for this subsection.]
+\begin{wrapfigure}{r}{0.46\textwidth}
+\centering
+\vspace{-1.0\baselineskip}
+\begin{tikzpicture}[scale=2.2, thick]
+  % Ground and step
+  \fill[gray!20] (-0.35,-0.18) rectangle (0,0);
+  \fill[gray!20] (0,0) rectangle (0.6,-0.02);
+  \draw[very thick] (-0.35,0) -- (0,0) -- (0,-0.18);
+  \draw[very thick] (0,0) -- (0.6,0);
+
+  % Wheel
+  \def\r{0.15}
+  \def\h{0.09}  % example h = 9 cm
+  \pgfmathsetmacro{\cx}{sqrt(2*\r*\h - \h*\h)}
+  \pgfmathsetmacro{\cy}{\r - \h}
+  \draw ({\cx},{\cy}) circle (\r);
+
+  % Geometry annotations
+  \draw[dashed,thin] ({\cx},{\cy}) -- (0,0)
+    node[midway, above left, font=\tiny] {$r$};
+  \draw[latex-latex, thin] (0,-0.17) -- ({\cx},-0.17)
+    node[midway, below, font=\tiny] {$\sqrt{2rh-h^2}$};
+  \draw[latex-latex, thin] (-0.3,0) -- (-0.3,-\h)
+    node[midway, left, font=\tiny] {$h$};
+
+  % Force arrow
+  \draw[-latex, blue!70!black, very thick]
+    ({\cx+\r+0.05},{\cy}) -- ({\cx+\r+0.05+0.12},{\cy})
+    node[right, font=\tiny] {$F_\mathrm{step}$};
+\end{tikzpicture}
+\caption{Step-climbing geometry: wheel of radius $r$ contacting
+  a step of height $h$. The required horizontal force at the axle is
+  $F_\mathrm{step} = W_\mathrm{front}\sqrt{2rh-h^2}/(r-h)$.}
+\label{fig:step_geom}
+\vspace{-0.6\baselineskip}
+\end{wrapfigure}
+
+Drive motor selection was based on two parallel analyses.
+First, a traction model accounting for rover mass, rolling
+resistance of Mars~yard terrain, and a \ang{15} slope yields
+a required wheel torque of approximately \SI{12}{\newton\metre}
+per wheel at \SI{1}{\metre\per\second} with \SI{1}{\second}
+acceleration time. Applying a safety factor of $k_s = 1.5$ and
+assuming drivetrain efficiency of $\eta = 0.8$ gives a rated
+motor requirement of approximately \SI{23.8}{\newton\metre}.
+Second, a step-climbing torque analysis was performed, relating
+required wheel torque to obstacle height for a wheel radius of
+\SI{150}{\milli\metre}; this sets an upper bound of approximately
+\SI{40}{\newton\metre} for the maximum obstacle height of
+$h^* \approx \SI{127}{\milli\metre}$ (${\approx}\,85\%$ of wheel
+radius). Based on these results, the \mbox{DM-J10010L-2EC} hub
+motor was selected, providing \SI{40}{\newton\metre} nominal and
+\SI{120}{\newton\metre} peak torque at \SI{48}{\volt} ---
+satisfying both the traction and obstacle-climbing requirements
+with adequate margin. To simplify logistics and electronics
+development, the same motor model is used for wheel drive,
+wheel steering rotation, and the shoulder joints of the
+manipulator arm.
+
+
+\begin{table}[h!]
+\centering
+\caption{Drive motor torque requirements - \(r = \SI{150}{\milli\metre}\), \(m = \SI{75}{\kilo\gram}\), \(N{=}4\) wheels}
+\label{tab:motor_torque}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Load case} & \textbf{Expression} & \textbf{Value} & \textbf{Note} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Traction model}} \\[2pt]
+Rolling resistance   
+  & $F_\mathrm{roll} = C_{rr}\,mg$                        
+  & \SI{73.6}{\newton}   
+  & $C_{rr}=0.10$ \\
+Grade force          
+  & $F_\mathrm{grade} = mg\sin\alpha$                     
+  & \SI{190.4}{\newton}  
+  & $\alpha=\ang{15}$ \\
+Acceleration force   
+  & $F_\mathrm{acc} = ma$                                 
+  & \SI{75.0}{\newton}   
+  & $a=\SI{1}{\metre\per\second\squared}$ \\
+Total traction force 
+  & $F_\mathrm{tot} = F_\mathrm{acc}+F_\mathrm{roll}+F_\mathrm{grade}$ 
+  & \SI{339.0}{\newton}  
+  & \\
+Wheel torque         
+  & $\tau_\mathrm{wheel} = F_\mathrm{tot}\,r/N$           
+  & \SI{12.7}{\newton\metre}  
+  & per wheel \\
+\textbf{Rated requirement} 
+  & $\tau_\mathrm{rated} = \tau_\mathrm{wheel}\,k_s/\eta$ 
+  & \textbf{\SI{23.8}{\newton\metre}} 
+  & $k_s{=}1.5,\;\eta{=}0.8$ \\[4pt]
+\multicolumn{4}{@{}l}{\textit{Step-climbing model}} \\[2pt]
+Front wheel load     
+  & $W_\mathrm{front} = mg/N$                             
+  & \SI{183.9}{\newton}  
+  & 50\,\% front share, 2 wheels \\
+Step torque          
+  & $\tau_\mathrm{step}(h) 
+    = W_\mathrm{front}\,r\,\dfrac{\sqrt{2rh-h^2}}{r-h}$  
+  & ---                  
+  & \\
+Max obstacle (nominal)
+  & $\tau_\mathrm{step}(h^*) = \SI{40}{\newton\metre}$   
+  & $h^* \approx \SI{127}{\milli\metre}$  
+  & $0.85\,r$ \\
+Max obstacle (peak)  
+  & $\tau_\mathrm{step}(h^{**}) = \SI{120}{\newton\metre}$
+  & $h^{**} \approx \SI{148}{\milli\metre}$ 
+  & $0.99\,r$ \\
+\bottomrule
+\end{tabular}
+\end{table}
