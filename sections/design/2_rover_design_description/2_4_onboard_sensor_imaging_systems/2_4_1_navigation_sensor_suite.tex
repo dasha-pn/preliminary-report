@@ -11,4 +11,6 @@ An RPLIDAR S2 is mounted on top of the rover, delivering a \ang{360} 2D depth sc
 
 Three Sipeed Maix Sense A010 ToF cameras mounted on the left flank, right flank, and rear collectively provide \ang{210} non-forward coverage. Each camera delivers a \numproduct{100 x 100} depth map at up to \qty{20}{\fps} with a \ang{70}~$\times$~\ang{60} (H$\times$V) FoV. The effective sensing range of \qtyrange{0.2}{2.5}{\metre} enables detection of close-range obstacles outside the stereo camera and LiDAR coverage zones, though performance may degrade under direct bright sunlight, with the RPLidar S2 maintaining omnidirectional coverage in such conditions.
 
-The ZED 2i and RPLidar S2 jointly provide input to state estimation and localization (\autoref{par:state_estimation_localization}), while all sensors contribute to collision avoidance (\autoref{par:autonomous_navigation_collision_avoidance}).
+For wheel odometry, the swerve drive modules are equipped with 14-bit single-turn absolute magnetic encoders. These provide highly precise, immediate angular position feedback for all drive and steering shafts.
+
+The ZED 2i, RPLIDAR S2, and encoders jointly provide input to state estimation and localization (\autoref{par:state_estimation_localization}), while all vision and ranging sensors sensors contribute to collision avoidance (\autoref{par:autonomous_navigation_collision_avoidance}).
