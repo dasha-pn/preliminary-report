@@ -5,15 +5,47 @@
 
 % Placeholder content for sections/design/2/2_5/2_5_4_arm_kinematics_motion_planning.tex
 
+\subsection*{Manipulator Control Software Stack}
 The manipulator is controlled using a ROS 2-based stack in which URDF/SRDF define the robot model, MoveIt 2 handles motion planning, KDL provides kinematics, OMPL generates trajectories, and ros2\_control sends commands to the real actuators. Custom ROS 2 nodes implement the application logic, while the CV module provides scene and target object data to MoveIt.
 
-The manipulator kinematic model is defined as an XML-based description using URDF/Xacro and SRDF, including links, joints, geometry, motion axes, limits, the base frame \texttt{base\_link}, and the tool frame \texttt{tool0} or \texttt{end\_effector}. This model is used for FK, IK, collision checking, and motion planning. Forward kinematics (FK) is handled by MoveIt 2 using KDL as the underlying solver. It takes current joint values as input and computes the position and orientation of the end effector. Inverse kinematics (IK) is performed by KDL within MoveIt 2. Given a target end-effector pose, it computes a valid joint configuration consistent with the manipulator geometry and motion limits.
+\subsection*{Kinematic Model Representation}
+The manipulator kinematic model is defined as an XML-based description using URDF/Xacro and SRDF, including links, joints, geometry, motion axes, limits, the base frame \texttt{base\_link}, and the tool frame \texttt{tool0} or \texttt{end\_effector}. This model is used for FK, IK, collision checking, and motion planning.
 
-FK and IK are configured through the URDF/Xacro model, which defines the actual joint order, joint types, rotation axes, zero positions, joint limits, link offsets, and the TCP location relative to the end effector. This binds the kinematic solver to the real manipulator geometry. Motion constraints are defined at several levels: URDF specifies joint types and limits, SRDF/MoveIt defines planning groups and logical constraints, and trajectory planning additionally considers workspace limits, self-collision, collision objects, and motion safety constraints.
+\subsection*{Forward Kinematics}
+Forward kinematics (FK) is handled by MoveIt 2 using KDL as the underlying solver. It takes current joint values as input and computes the position and orientation of the end effector.
 
-Trajectory generation is performed by MoveIt 2 together with OMPL. After a valid target configuration is found, the system computes a sequence of states from the current manipulator pose to the goal pose. Smooth motion is achieved through trajectory interpolation and time parameterization, converting a geometric path into an executable joint trajectory with proper velocity behavior. Collision avoidance is handled by MoveIt using the manipulator collision model and the current planning scene. The system checks self-collision, the robot base, the table, work objects, and other obstacles, including those provided by the CV module.
+\subsection*{Inverse Kinematics}
+Inverse kinematics (IK) is performed by KDL within MoveIt 2. Given a target end-effector pose, it computes a valid joint configuration consistent with the manipulator geometry and motion limits.
 
-After planning, the trajectory is sent through ros2\_control to the execution layer, where the corresponding controller converts the joint trajectory into commands for the real actuators. Custom ROS 2 nodes handle the application-specific logic: target pose acquisition, coordinate transformation, CV integration, MoveIt planning requests, and execution control. The full pipeline is as follows: the system receives a target, the CV module detects the object and scene parameters, custom nodes transform the data into the required frame, MoveIt 2 with KDL solves IK, OMPL generates a collision-free trajectory, the trajectory is smoothed, and ros2\_control sends it to the manipulator actuators.
+\subsection*{FK/IK Configuration for the Manipulator Geometry}
+FK and IK are configured through the URDF/Xacro model, which defines the actual joint order, joint types, rotation axes, zero positions, joint limits, link offsets, and the TCP location relative to the end effector. This binds the kinematic solver to the real manipulator geometry.
 
-This set of components is used because MoveIt 2 provides planning and collision checking, KDL provides standard kinematics, OMPL solves the path planning problem, ros2\_control handles hardware execution, and custom ROS 2 nodes integrate all components into a complete robotic application. The implementation must account for IK ambiguity, singularities, unreachable poses, dependence on URDF accuracy, zero-position calibration, and consistency between the software model and the real manipulator geometry. The subsection should be organized as follows: software stack, kinematic model representation, FK, IK, geometry-specific configuration, motion constraints, trajectory generation and smoothing, collision checking, execution, and the full manipulator control pipeline.
+\subsection*{Motion Constraints}
+Motion constraints are defined at several levels: URDF specifies joint types and limits, SRDF/MoveIt defines planning groups and logical constraints, and trajectory planning additionally considers workspace limits, self-collision, collision objects, and motion safety constraints.
 
+\subsection*{Trajectory Generation}
+Trajectory generation is performed by MoveIt 2 together with OMPL. After a valid target configuration is found, the system computes a sequence of states from the current manipulator pose to the goal pose.
+
+\subsection*{Smooth Motion Planning}
+Smooth motion is achieved through trajectory interpolation and time parameterization, converting a geometric path into an executable joint trajectory with proper velocity behavior.
+
+\subsection*{Collision Avoidance}
+Collision avoidance is handled by MoveIt using the manipulator collision model and the current planning scene. The system checks self-collision, the robot base, the table, work objects, and other obstacles, including those provided by the CV module.
+
+\subsection*{Trajectory Execution}
+After planning, the trajectory is sent through ros2\_control to the execution layer, where the corresponding controller converts the joint trajectory into commands for the real actuators.
+
+\subsection*{Custom ROS 2 Nodes}
+Custom ROS 2 nodes handle the application-specific logic: target pose acquisition, coordinate transformation, CV integration, MoveIt planning requests, and execution control.
+
+\subsection*{Full Execution Pipeline}
+The full pipeline is as follows: the system receives a target, the CV module detects the object and scene parameters, custom nodes transform the data into the required frame, MoveIt 2 with KDL solves IK, OMPL generates a collision-free trajectory, the trajectory is smoothed, and ros2\_control sends it to the manipulator actuators.
+
+\subsection*{Rationale for the Selected Components}
+This set of components is used because MoveIt 2 provides planning and collision checking, KDL provides standard kinematics, OMPL solves the path planning problem, ros2\_control handles hardware execution, and custom ROS 2 nodes integrate all components into a complete robotic application.
+
+\subsection*{Practical Implementation Considerations}
+The implementation must account for IK ambiguity, singularities, unreachable poses, dependence on URDF accuracy, zero-position calibration, and consistency between the software model and the real manipulator geometry.
+
+\subsection*{Final Subsection Structure}
+The subsection should be organized as follows: software stack, kinematic model representation, FK, IK, geometry-specific configuration, motion constraints, trajectory generation and smoothing, collision checking, execution, and the full manipulator control pipeline.
