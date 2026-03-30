@@ -1,0 +1,192 @@
+% Wiring diagram for the electronics
+% Requires in preamble.tex:
+% \usetikzlibrary{arrows.meta,positioning,calc,backgrounds,fit}
+
+\tikzset{
+  blk/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=4cm, minimum height=1.2cm,
+    align=center, font=\small, inner ysep=2pt
+  },
+  jetson/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=7cm, minimum height=4cm,
+    align=center, font=\small, inner ysep=2pt
+  },
+  sensor/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=3cm, minimum height=0.8cm,
+    align=center, font=\small, inner ysep=2pt
+  },
+  esp32/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=4cm, minimum height=2cm,
+    align=center, font=\small, inner ysep=2pt
+  },
+  motor/.style={
+    rectangle, draw=black, fill=white, text=black, line width=0.5pt,
+    minimum width=1cm, minimum height=2cm,
+    align=center, font=\small, inner ysep=1pt
+  },
+  arr/.style={-{Stealth[length=2.5pt]}, line width=0.5pt, draw=black},
+  line/.style={line width=0.5pt, draw=black},
+  proto/.style={font=\tiny, fill=white, inner sep=1.5pt, draw=none},
+}
+
+\begin{tikzpicture}[node distance=0.7cm and 2.5cm]
+
+%% === ADAPTERS ===
+\node[blk] (usbhub) {USB Hub};
+\node[blk, below=0.7cm of usbhub] (uartbridge) {UART-to-USB Bridge};
+\node[blk, below=0.7cm of uartbridge] (ttlbridge) {TTL-to-USB Adapter};
+
+%% === JETSON ===
+\node[jetson, right=5cm of $(usbhub)!0.5!(ttlbridge)$, yshift=2cm] (jetson) {NVIDIA Jetson Orin 16GB};
+
+%% === SENSORS ===
+\node[sensor, left=3cm of uartbridge] (lidar) {LiDAR (RPLIDAR 2s)};
+\node[sensor, below=0.5cm of lidar] (human1) {Human Sensor 1};
+\node[sensor, below=0.3cm of human1] (human2) {Human Sensor 2};
+\node[sensor, below=0.3cm of human2] (human3) {Human Sensor 3};
+\node[sensor, below=0.3cm of human3] (human4) {Human Sensor 4};
+
+\node[sensor, above=0.5cm of lidar] (tof1) {ToF Camera 1};
+\node[sensor, above=0.3cm of tof1] (tof2) {ToF Camera 2};
+\node[sensor, above=0.3cm of tof2] (tof3) {ToF Camera 3};
+
+\node[sensor, right=3.75cm of human4] (stereo) {Stereo Camera};
+
+%% === ESP32 ===
+\node[esp32, below=1.5cm of jetson, right=4.5cm of stereo] (esp32) {ESP32-S3};
+
+\foreach \i/\name in {1/Wheel 1,2/Wheel 2,3/Wheel 3,4/Wheel 4,5/Wheel 5,6/Wheel 6,7/Wheel 7,8/Wheel 8}
+\node[motor, below=1.5cm of esp32, xshift={(\i-4.5)*1.2cm}] (motor\i) {\rotatebox{90}{\name}};
+
+%% === RASPBERRY PI ===
+\node[esp32] (rpi) at ($(usbhub.east |- stereo.east)+(-2cm,12cm)$) {Raspberry Pi 4 Model B};
+
+\foreach \i/\name in {1/Motor 1,2/Motor 2,3/Motor 3,4/Motor 4,5/Motor 5,6/Motor 6}
+\node[motor, above=1.5cm of rpi, xshift={(\i-3.5)*1.2cm}] (rmotor\i) {\rotatebox{90}{\name}};
+
+%% === ARROWS TO JETSON ===
+\draw[arr] (usbhub.east)     -- ++(1.0cm,0) |- ([yshift=-0.08cm]jetson.west)
+  node[proto, pos=0.22, yshift=6pt] {USB 3.1};
+\draw[arr] (uartbridge.east) -- ++(1.6cm,0) |- ([yshift=-0.5cm]jetson.west)
+  node[proto, pos=0.22, yshift=6pt] {USB 2.0};
+\draw[arr] (ttlbridge.east)  -- ++(2.2cm,0) |- ([yshift=-1cm]jetson.west)
+  node[proto, pos=0.22, yshift=6pt] {USB 3.0};
+
+\draw[arr] 
+(stereo.east) -- ++(1.2cm,0) -- ++(0,1.8cm) -- ++(2.6cm,0) -- ([yshift=-2cm]jetson.west)
+  node[proto, pos=0.6, yshift=7pt] {USB 3.1};
+
+%% === SENSOR CONNECTIONS ===
+\draw[arr] (lidar.east) -- ++(1.2cm,0) |- (uartbridge.west)
+  node[proto, pos=0.22, yshift=6pt] {UART};
+
+\foreach \h in {1,2,3,4}
+  \draw[arr] (human\h.east) -- ++(1.2cm,0) |- (ttlbridge.west)
+    node[proto, pos=0.1, yshift=6pt] {UART};
+
+\foreach \t in {1,2,3}
+  \draw[arr] (tof\t.east) -- ++(1.2cm,0) |- (usbhub.west)
+    node[proto, pos=0.22, yshift=6pt] {USB 2.0};
+
+%% === ESP BUS ===
+\coordinate (esp_down) at ($(esp32.south)+(0,-1cm)$);
+\draw[arr] (esp_down) -- (esp32.south);
+
+\draw[<->, line width=0.5pt] (esp32.north) -- ($(jetson.south)+(-0.8cm,0)$)
+  node[proto, pos=0.5, xshift=12pt] {CAN};
+
+\coordinate (bus_center) at ($(motor1.north)!0.5!(motor8.north)$);
+\coordinate (bus_left)   at ($(bus_center)+(-4.2cm,0.5cm)$);
+\coordinate (bus_right)  at ($(bus_center)+(4.2cm,0.5cm)$);
+\draw[line width=0.5pt] (bus_left) -- (bus_right)
+  node[proto, pos=0.5, yshift=6pt] {CAN bus};
+
+\foreach \i in {1,...,8}
+  \draw[arr] ($ (bus_left)!{(\i-1)/7}!(bus_right) $) -- (motor\i.north);
+
+%% === RPI BUS (UP) ===
+\coordinate (rpi_up) at ($(rpi.north)+(0,1cm)$);
+\draw[arr] (rpi_up) -- (rpi.north);
+
+\coordinate (rbus_center) at ($(rmotor1.south)!0.5!(rmotor6.south)$);
+\coordinate (rbus_left)   at ($(rbus_center)+(-3cm,-0.5cm)$);
+\coordinate (rbus_right)  at ($(rbus_center)+(3cm,-0.5cm)$);
+\draw[line width=0.5pt] (rbus_left) -- (rbus_right)
+  node[proto, pos=0.5, yshift=-7pt] {CAN bus};
+
+\foreach \i in {1,...,6}
+  \draw[arr] ($ (rbus_left)!{(\i-1)/5}!(rbus_right) $) -- (rmotor\i.south);
+
+%% === ARM CAMERA ===
+\node[sensor] (armcam) at ($(rmotor1)!0.5!(rmotor6)+(-6.5cm,0)$) {Camera};
+
+\draw[arr] 
+    (armcam.east) -- ++(1cm,0)
+                  -- ++(0,-2cm)
+                  -- ++(2.2cm,0)
+                  -- ([xshift=-1.8cm]rpi.north)
+  node[proto, pos=0.55, xshift=10pt] {USB 3.0};
+
+%% === GRIPPER MOTOR ===
+\node[sensor, minimum height=1.5cm] (gripper) at ($(armcam.south)+(0,-2cm)$) {NEMA 17 Stepper + Driver};
+
+\draw[arr] ([yshift=-0.5cm]gripper.east) -- ++(1cm,0) |- ([yshift=0.63cm]rpi.west)
+  node[proto, pos=-1, yshift=5pt] {GPIO/UART};
+
+%% === TOUCH SENSORS ===
+\node[sensor, minimum width=2.5cm] (touch1) at ($(gripper.south)+(0cm,-1cm)$) {Touch Sensor 1};
+\node[sensor, minimum width=2.5cm] (touch2) at ($(gripper.south)+(0cm,-2cm)$) {Touch Sensor 2};
+
+\draw[arr] (touch1.east) -- ++(1.5cm,0) |- ([yshift=-0cm]rpi.west)
+  node[proto, pos=0.3, yshift=6pt] {I2C/SPI};
+\draw[arr] (touch2.east) -- ++(2cm,0) |- ([yshift=-0.5cm]rpi.west)
+  node[proto, pos=0.3, yshift=6pt] {I2C/SPI};
+
+%% === CONNECTION BETWEEN RPI AND JETSON ===
+\draw[arr] ([yshift=0.5cm]rpi.east) -- ++(1.5cm,0) |- ([yshift=1.5cm]jetson.west)
+  node[proto, pos=0.5, yshift=7pt] {Ethernet};
+
+\draw[<->, line width=0.5pt] (rpi.east) -- ++(1cm,0) |- ([yshift=0.8cm]jetson.west)
+  node[proto, pos=0.5, yshift=7pt] {CAN};
+
+%% === LEGEND ===
+\node[draw=black, line width=0.5pt, inner sep=6pt, anchor=north west,
+      font=\small, align=left]
+  at ($(jetson.north east)+(7cm, 9cm)$)
+  {%
+    \textbf{Legend}\\[3pt]
+    $\rightarrow$\; Unidirectional\\[2pt]
+    $\leftrightarrow$\; Bidirectional
+  };
+
+%% === FRAMES ===
+\begin{scope}[on background layer]
+\node[draw=black, dashed, thick, inner sep=8pt, rounded corners=3pt,
+fit=(usbhub)(uartbridge)(ttlbridge)(lidar)(human1)(human2)(human3)(human4)(tof1)(tof2)(tof3)(stereo)] 
+(navframe) {};
+\node[font=\small\bfseries, above=3pt of navframe.north] {navigation};
+\end{scope}
+
+\begin{scope}[on background layer]
+\node[draw=black, dashed, thick, inner sep=8pt, rounded corners=3pt,
+fit=(esp32)(motor1)(motor2)(motor3)(motor4)(motor5)(motor6)(motor7)(motor8)] 
+(suspframe) {};
+\node[font=\small\bfseries, above=3pt of suspframe.north] {suspension};
+\end{scope}
+
+\begin{scope}[on background layer]
+\node[draw=black, dashed, thick, inner sep=8pt, rounded corners=3pt,
+fit=(armcam)(gripper)(touch1)(touch2)(rpi)(rmotor1)(rmotor2)(rmotor3)(rmotor4)(rmotor5)(rmotor6)] 
+(armframe) {};
+\node[font=\small\bfseries, above=3pt of armframe.north] {arm};
+\end{scope}
+
+\node[font=\footnotesize, align=center] at ($(armframe.east)+(5cm,2cm)$) {There will be a ground station here\\waiting for data};
+
+\node[font=\footnotesize, align=center] at ($(armframe.east)+(15cm,-5cm)$) {There will be a scientific module\\waiting for data};
+
+\end{tikzpicture}
