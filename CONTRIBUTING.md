@@ -63,6 +63,30 @@
    - додай скріншот скопільованої секції, щоб було зручно рев'ювити твою секцію
 4. Новий PR створюємо як **Draft**. Після перевірки тімлід переводить його з Draft у Ready for review.
 
+#### Приклад description / коментаря до PR (Markdown)
+
+Скопіюй шаблон нижче в опис PR або в перший коментар:
+
+```md
+## What Was Done
+- Updated subsection: `sections/design/<chapter>/<section>/<subsection>/<file>.tex`
+- Added/updated: <short summary of changes>
+
+## Closed Requirements
+- REQ-XXX-001
+- REQ-XXX-002
+
+## Cross-references
+- Added/updated references to: `Section X.Y`, `Table Z`, `Figure N`
+
+## Remaining Work
+- [ ] <item 1>
+- [ ] <item 2>
+
+## Section Screenshot
+![Compiled subsection screenshot](<insert_link_or_drag_and_drop_image_here>)
+```
+
 ### Стандарт назви гілки
 
 - `des/<subsection-id>-<short-title>`
