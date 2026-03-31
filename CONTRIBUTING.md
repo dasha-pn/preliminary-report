@@ -89,8 +89,8 @@
 
 ### Стандарт назви гілки
 
-- `des/<subsection-id>-<short-title>`
-- приклад: `des/5.5-link-performance-analysis`
+- `des/<subsection-id>_<short-title>`
+- приклад: `des/5_5_link_performance_analysis`
 
 ## Рекомендований git workflow
 
@@ -102,7 +102,7 @@ git checkout main
 git pull
 
 # 1) Після того як зробив зміни у своєму subsection-файлі
-git checkout -b des/<subsection-id>-<short-title>
+git checkout -b des/<subsection-id>_<short-title>
 
 # 2) Додати лише змінений файл
 git add sections/design/<chapter>/<section>/<subsection>/<file>.tex
@@ -128,7 +128,7 @@ git checkout main
 
 ```bash
 # 1) Перейти на гілку цього PR
-git checkout des/<subsection-id>-<short-title>
+git checkout des/<subsection-id>_<short-title>
 
 # 2) Внести правки у свій файл
 
