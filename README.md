@@ -10,6 +10,10 @@
 
 ---
 
+## Report updates !МЕГА ВАЖЛИВО!
+[REPORT_UPDATES.md](REPORT_UPDATES.md)
+
+
 ## Diagram standarts
 
 **Всі стандарти** описані у [DIAGRAM_STANDARDS.md](DIAGRAM_STANDARDS.md)
