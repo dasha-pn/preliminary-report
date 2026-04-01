@@ -2,9 +2,13 @@
 % Teams: Suspension
 % Requirements: REQ-DES-130 REQ-FUN-020
 % Status: [done]
-\begin{wrapfigure}[16]{r}{0.48\textwidth}
+\begin{figure}[h!]
 \centering
-\vspace{-0.8\baselineskip}
+\captionsetup{font=footnotesize}
+\captionsetup[subfigure]{font=footnotesize}
+
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
 \begin{tikzpicture}[scale=6, >=latex]
 
   %% ---- Parameters ----
@@ -53,36 +57,71 @@
     node[right, font=\small\bfseries] {$F_{\mathrm{step}}$};
 
 \end{tikzpicture}
-\caption{Step-climbing geometry: wheel of radius~$r$ on lower ground
-  contacts the step corner at height~$h$. The horizontal distance from
-  the wheel centre to the corner is $\sqrt{2rh-h^2}$, and the
-  required axle force is
-  $F_{\mathrm{step}} = W_{\mathrm{front}}\,r\sqrt{2rh-h^2}\,/(r-h)$.}
+\caption{Step-climbing geometry with obstacle height $h$ and wheel radius $r$.}
 \label{fig:step_geom}
-\vspace{-0.5\baselineskip}
-\end{wrapfigure}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\centering
+\begin{tikzpicture}[scale=1.0, >=Stealth]
+  % Slope and horizontal reference
+  \draw[gray!60, dashed] (-0.4,0) -- (5.0,0);
+  \draw[line width=1.0pt] (0,0) -- ({4.8*cos(15)},{4.8*sin(15)});
 
-Drive motor selection was based on two parallel analyses.
-First, a traction model accounting for rover mass, rolling
-resistance of Mars~yard terrain, and a \ang{15} slope yields
-a required wheel torque of approximately \SI{12}{\newton\metre}
-per wheel at \SI{1}{\metre\per\second} with \SI{1}{\second}
-acceleration time. Applying a safety factor of $k_s = 1.5$ and
-assuming drivetrain efficiency of $\eta = 0.8$ gives a rated
-motor requirement of approximately \SI{23.8}{\newton\metre}.
-Second, a step-climbing torque analysis was performed, relating
-required wheel torque to obstacle height for a wheel radius of
-\SI{150}{\milli\metre}; this sets an upper bound of approximately
-\SI{40}{\newton\metre} for the maximum obstacle height of
-$h^* \approx \SI{127}{\milli\metre}$ (${\approx}\,85\%$ of wheel
-radius). Based on these results, the \mbox{DM-J10010L-2EC} hub
-motor was selected, providing \SI{40}{\newton\metre} nominal and
-\SI{120}{\newton\metre} peak torque at \SI{48}{\volt} ---
-satisfying both the traction and obstacle-climbing requirements
-with adequate margin. To simplify logistics and electronics
-development, the same motor model is used for wheel drive,
-wheel steering rotation, and the shoulder joints of the
-manipulator arm.
+  % Wheel geometry on slope
+  \pgfmathsetmacro{\rw}{0.55}
+  \coordinate (P) at ({2.0*cos(15)},{2.0*sin(15)});
+  \coordinate (C) at ({2.0*cos(15)-\rw*sin(15)},{2.0*sin(15)+\rw*cos(15)});
+  \draw[line width=0.9pt] (C) circle (\rw);
+  \fill (C) circle (1.1pt);
+
+  % Velocity vector uphill (Formula 1 case)
+  \draw[->, line width=1.1pt, blue!75!black]
+    (C) -- ++({1.15*cos(15)},{1.15*sin(15)})
+    node[above right, font=\scriptsize] {$v=\SI{1}{\metre\per\second}$};
+
+  % Weight vector
+  \draw[->, line width=0.9pt, red!70!black]
+    (C) -- ++(0,-1.0)
+    node[right, font=\scriptsize] {$mg$};
+
+  % Slope angle label
+  \draw[->, line width=0.6pt] (0.95,0) arc[start angle=0, end angle=15, radius=0.95];
+  \node[font=\scriptsize] at (1.2,0.2) {$\alpha=\ang{15}$};
+\end{tikzpicture}
+\caption{Uphill case from Formula~1: \ang{15} slope and $v=\SI{1}{\metre\per\second}$.}
+\label{fig:uphill_motion_formula1}
+\end{subfigure}
+
+\caption{Locomotion load cases used for drivetrain sizing.}
+\label{fig:locomotion_load_cases}
+\end{figure}
+
+Drive motor sizing was finalized from traction and step-climbing analyses.
+
+\begin{itemize}[leftmargin=1.2em, itemsep=0.2em, topsep=0.3em]
+  \item \textbf{Traction case (\ang{15} slope):} the model gives wheel torque
+  $\tau_\mathrm{wheel}\approx\SI{12.7}{\newton\metre}$ at
+  $v=\SI{1}{\metre\per\second}$ and
+  $a=\SI{1}{\metre\per\second\squared}$.
+
+  \item \textbf{Rated motor requirement:} with safety factor
+  $k_s=1.5$ and drivetrain efficiency $\eta=0.8$,
+  $\tau_\mathrm{rated}\approx\SI{23.8}{\newton\metre}$.
+
+  \item \textbf{Step-climbing case:} for wheel radius
+  $r=\SI{150}{\milli\metre}$, the nominal torque limit
+  $\SI{40}{\newton\metre}$ corresponds to
+  $h^*\approx\SI{127}{\milli\metre}\;(\approx0.85r)$.
+
+  \item \textbf{Motor selection:} \mbox{DM-J10010L-2EC},
+  \SI{40}{\newton\metre} nominal and
+  \SI{120}{\newton\metre} peak at \SI{48}{\volt},
+  covering both load cases with margin.
+
+  \item \textbf{Standardization:} the same motor model is used for
+  wheel drive, steering rotation, and manipulator shoulder joints.
+\end{itemize}
 
 
 \begin{table}[h!]
