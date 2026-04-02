@@ -1,8 +1,15 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Science Team, Ground Station Team, Arm Team
+% Requirements: REQ-FUN-170, REQ-GEN-080, REQ-FUN-130
+% Status: in-progress
 
-% Placeholder content for sections/design/2/2_4/2_4_3_rover_camera_suite.tex
+An Arducam AR0234 color global shutter USB 3.0 camera is mounted \qty{10}{\centi\metre} above the gripper, aligned parallel to its orientation to support object recognition and pose estimation. The global shutter sensor ensures blur-free imaging during dynamic arm movements. The module utilizes an M12 manual-focus lens ($f = \qty{3.6}{\milli\metre}$) delivering an \ang{82}~$\times$~\ang{66} (H$\times$V) FoV with low ($\sim$\qty{3}{\percent}) distortion.
 
-[Add content for this subsection.]
+% TODO: Specify illumination module (e.g., LED floodlight/COB), beam angle (>\ang{120}), maybe power draw, and maybe PWM control
+Integrated wide-angle illumination provides consistent, shadow-free visibility of the front working area during maintenance and liquid sampling operations.
+
+
+The rover's camera suite consists of a stereo pair main color camera, front and rear facing wide-angle color cameras, providing comprehensive visual information for navigation. The stereo pair captures a \numproduct{2560 x 720} \qty{93}{fps} video for clear imaging, while the wide-angle cameras offer a wider field of view for situational awareness and terrain assessment in front of the rover. The main camera has a \qty{120}{degree} and a \qty{90}{degree} field of view for the left and right cameras, respectively, while the wide-angle cameras have a \qty{150}{degree} field of view.
+
+% TODO: paragraphs for Science Team
+For geological surface analysis, a MAPIR Survey3W OCN multispectral camera is mounted on the rover chassis front face for maximum terrain visibility, providing three-band imaging at \qty{490}{\nano\metre} (cyan), \qty{615}{\nano\metre} (orange), and \qty{808}{\nano\metre} (NIR), targeting $Fe^{3+}$ charge-transfer absorption in iron oxides, the red-edge transition of hematite and goethite, and crystal-field reflectance of olivine and pyroxene respectively. Capture is triggered via PWM signal over the HDMI interface, with video streamed to the Jetson at \numproduct{1920 x 1440} \qty{30}{fps} via H.264 over USB. A dedicated camera mounted between the rover chassis and the drill attachment — oriented downward — documents surface state before and after drilling and monitors the drilling process. A third camera integrated into the mini-manipulator workspace enables autonomous detection and size estimation of candidate rock samples prior to retrieval.
