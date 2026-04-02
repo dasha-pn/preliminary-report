@@ -3,12 +3,16 @@
 % Requirements: REQ-FUN-220, REQ-FUN-240, REQ-ENV-040
 % Status: done
 
-The navigation sensor suite is designed to provide full \ang{360} perception, enabling simultaneous state estimation and collision avoidance.
+The navigation sensor suite provides near-\ang{360} perception for simultaneous state estimation and collision avoidance.
 
-A StereoLabs ZED 2i stereo camera is mounted at the front of the rover, providing RGB imagery and depth data at \numproduct{1280 x 720} resolution and \qty{60}{\fps}. The wide \ang{110}~$\times$~\ang{70} (H$\times$V) FoV ensures detection coverage beyond the rover's direct forward path. Depth perception is effective within a range of \qtyrange{0.3}{20}{\metre}. The camera integrates a 6-axis IMU operating at \qty{400}{\hertz} and a magnetometer, providing inertial measurements for state estimation.
+\begin{itemize}
+	\item \textbf{Front stereo vision (ZED 2i):} RGB imagery and depth at \numproduct{1280 x 720} and \qty{60}{\fps}. Field of view: \ang{110}~$\times$~\ang{70} (H$\times$V). Effective depth range: \qtyrange{0.3}{20}{\metre}. The integrated 6-axis IMU (\qty{400}{\hertz}) and magnetometer support inertial state estimation.
 
-An RPLIDAR S2 is mounted on top of the rover, delivering a \ang{360} 2D depth scan with \ang{0.12} angular resolution at \qty{10}{\hertz}. The sensor reliably detects obstacles up to \qty{10}{\metre} regardless of surface reflectivity and lighting conditions, enabling detection of rover-scale obstacles and large terrain features.
+	\item \textbf{Top LiDAR (RPLIDAR S2):} \ang{360} 2D scanning with \ang{0.12} angular resolution at \qty{10}{\hertz}. Reliable obstacle detection up to \qty{10}{\metre} across varying lighting and reflectivity conditions.
 
-Three Sipeed Maix Sense A010 ToF cameras mounted on the left flank, right flank, and rear collectively provide \ang{210} non-forward coverage. Each camera delivers a \numproduct{100 x 100} depth map at up to \qty{20}{\fps} with a \ang{70}~$\times$~\ang{60} (H$\times$V) FoV. The effective sensing range of \qtyrange{0.2}{2.5}{\metre} enables detection of close-range obstacles outside the stereo camera and LiDAR coverage zones, though performance may degrade under direct bright sunlight, with the RPLidar S2 maintaining omnidirectional coverage in such conditions.
+	\item \textbf{Side and rear close-range coverage (3\,$\times$ Maix Sense A010 ToF):} Sensors mounted on the left flank, right flank, and rear provide \ang{210} non-forward coverage. Each sensor outputs a \numproduct{100 x 100} depth map at up to \qty{20}{\fps} with \ang{70}~$\times$~\ang{60} (H$\times$V) FoV and an effective range of \qtyrange{0.2}{2.5}{\metre}. Performance may degrade under direct bright sunlight.
 
-The ZED 2i and RPLidar S2 jointly provide input to state estimation and localization (\autoref{par:state_estimation_localization}), while all sensors contribute to collision avoidance (\autoref{par:autonomous_navigation_collision_avoidance}).
+	\item \textbf{Wheel odometry:} Swerve drive modules use 14-bit single-turn absolute magnetic encoders, providing immediate and precise angular feedback for drive and steering shafts.
+\end{itemize}
+
+The ZED 2i, RPLIDAR S2, and encoders provide input to state estimation and localization (\autoref{par:state_estimation_localization}), while all vision and ranging sensors support collision avoidance (\autoref{par:autonomous_navigation_collision_avoidance}).

@@ -25,8 +25,10 @@
 \usepackage{graphicx}
 \graphicspath{{figures/}}
 \usepackage{float}
+\usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{adjustbox}
 
 % --- Tables ------------------------------------------------------------------
 \usepackage{booktabs}
@@ -96,6 +98,21 @@
 % --- PDF attachments (for embedding MoC .xlsx) -------------------------------
 \usepackage{attachfile2}
 
+% --- TikZ diagrams -------------------------------
+\usepackage{tikz}
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    backgrounds,
+    fit,
+    shapes.geometric,
+    shapes.multipart,
+    matrix,
+    chains,
+    quotes
+}
+
 % --- Miscellaneous -----------------------------------------------------------
 \usepackage{microtype}
 \usepackage{parskip}
@@ -120,3 +137,6 @@
 \newcommand{\riskhigh}{\colorbox{red!40}{\textbf{High}}}
 \newcommand{\riskmedium}{\colorbox{orange!40}{\textbf{Medium}}}
 \newcommand{\risklow}{\colorbox{green!30}{\textbf{Low}}}
+
+% Right-aligned compact requirement tags for headings
+\newcommand{\reqtags}[1]{\hfill\normalfont\footnotesize #1}

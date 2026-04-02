@@ -1,8 +1,50 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: General Electronics
+% Requirements: REQ-DES-020, REQ-DES-030, REQ-DES-050
+% Status: in-progress
 
-% Placeholder content for sections/design/1/1_1/1_1_2_drone_product_tree.tex
 
-[Add content for this subsection.]
+The rover's electronics architecture is divided into 5 functional
+subsystems: \textit{navigation}, \textit{suspension}, and \textit{arm},
+\textit{ground station}, \textit{scientific
+payload module},
+all coordinated by a central compute unit --- the NVIDIA Jetson Orin 16GB.
+The Jetson aggregates sensor data from the navigation subsystem (ToF cameras,
+stereo camera, LiDAR, and human presence sensors) via USB and receives
+high-level commands from an onboard Raspberry~Pi~4 responsible for arm
+control. Low-level motor control for the suspension wheels is delegated to
+an ESP32-S3 microcontroller communicating over a CAN bus. (It will also be indicated for the science module and the ground station module. It will also be indicated for the red button and activity indicator, power will be added to the circuit)
+
+
+\begin{figure}[H]
+  \centering
+  \adjustbox{max width=\linewidth}{\input{teams/electronics/figures/wiring_diagram.tex}
+  }
+  \caption{
+System Architecture: Electronics Block Diagram}
+  \label{fig:block_diagram}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \caption{Component model reference
+           (see Table~\ref{tab:component_specs} for full specifications)}
+  \label{tab:component_models}
+  \small
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{Component (diagram label)} & \textbf{Model} \\
+    \midrule
+    ToF Camera 1--3       & Sipeed MaixSense A010 \\
+    Stereo Camera         & StereoLabs ZED2i \\
+    LiDAR                 & RPLIDAR 2s \\
+    Human Sensor 1--4     & HLK-LD2450 \\
+    Camera (arm)          & Arducam AR0234 (2.3\,MP, Global Shutter) \\
+    Motor 1--3 (arm)      & SteadyWin GIM8115-36 \\
+    Motor 4--6 (arm)      & DAMIAO DM-J4340-2EC \\
+    Wheel 1--4            & DAMIAO DM-J10010L-2EC \\
+    Wheel 5--8            & SteadyWin GIM8115-36 \\
+    NEMA 17 Stepper       & NEMA 17 + driver (TBD) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
