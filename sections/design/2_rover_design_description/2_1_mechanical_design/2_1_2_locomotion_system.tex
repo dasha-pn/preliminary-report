@@ -2,12 +2,15 @@
 % Teams: Suspension
 % Requirements: REQ-DES-130 REQ-FUN-020
 % Status: [done]
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \captionsetup{font=footnotesize}
 \captionsetup[subfigure]{font=footnotesize}
 
-\begin{subfigure}[t]{0.48\textwidth}
+\begin{minipage}{0.78\textwidth}
+\centering
+
+\begin{subfigure}[t]{0.49\linewidth}
 \centering
 \begin{tikzpicture}[scale=6, >=latex]
 
@@ -59,11 +62,10 @@
 \end{tikzpicture}
 \caption{Step-climbing geometry with obstacle height $h$ and wheel radius $r$.}
 \label{fig:step_geom}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.48\textwidth}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.49\linewidth}
 \centering
-\begin{tikzpicture}[scale=1.0, >=Stealth]
+\begin{tikzpicture}[scale=0.82, >=Stealth]
   % Slope and horizontal reference
   \draw[gray!60, dashed] (-0.4,0) -- (5.0,0);
   \draw[line width=1.0pt] (0,0) -- ({4.8*cos(15)},{4.8*sin(15)});
@@ -87,20 +89,23 @@
 
   % Slope angle label
   \draw[->, line width=0.6pt] (0.95,0) arc[start angle=0, end angle=15, radius=0.95];
-  \node[font=\scriptsize] at (1.2,0.2) {$\alpha=\ang{15}$};
+  \node[font=\scriptsize] at (0.82,-0.12) {$\alpha=\ang{15}$};
 \end{tikzpicture}
 \caption{Uphill case from Formula~1: \ang{15} slope and $v=\SI{1}{\metre\per\second}$.}
 \label{fig:uphill_motion_formula1}
 \end{subfigure}
+\end{minipage}
 
 \caption{Locomotion load cases used for drivetrain sizing.}
 \label{fig:locomotion_load_cases}
 \end{figure}
 
-Drive motor sizing was finalized from traction and step-climbing analyses.
+Drivetrain torque sizing is based on two governing load cases: uphill traction and step climbing.
+
+All calculations in this subsection are approximate engineering estimates used for system-level sizing, with conservative margin applied in final actuator requirements.
 
 \begin{itemize}[leftmargin=1.2em, itemsep=0.2em, topsep=0.3em]
-  \item \textbf{Traction case (\ang{15} slope):} the model gives wheel torque
+  \item \textbf{Traction case (\ang{15} slope):} estimated wheel torque
   $\tau_\mathrm{wheel}\approx\SI{12.7}{\newton\metre}$ at
   $v=\SI{1}{\metre\per\second}$ and
   $a=\SI{1}{\metre\per\second\squared}$.
@@ -114,19 +119,19 @@ Drive motor sizing was finalized from traction and step-climbing analyses.
   $\SI{40}{\newton\metre}$ corresponds to
   $h^*\approx\SI{127}{\milli\metre}\;(\approx0.85r)$.
 
-  \item \textbf{Motor selection:} \mbox{DM-J10010L-2EC},
-  \SI{40}{\newton\metre} nominal and
-  \SI{120}{\newton\metre} peak at \SI{48}{\volt},
+  \item \textbf{Motor selection:} \textit{Drive Motor},
+  with \SI{40}{\newton\metre} nominal and
+  \SI{120}{\newton\metre} peak capability at 48~V,
   covering both load cases with margin.
 
-  \item \textbf{Standardization:} the same motor model is used for
+  \item \textbf{Standardization:} the same motor class is used for
   wheel drive, steering rotation, and manipulator shoulder joints.
 \end{itemize}
 
 
 \begin{table}[h!]
 \centering
-\caption{Drive motor torque requirements - \(r = \SI{150}{\milli\metre}\), \(m = \SI{75}{\kilo\gram}\), \(N{=}4\) wheels}
+\caption{Drive motor torque requirements (\(r = \SI{150}{\milli\metre}\), \(m = \SI{75}{\kilo\gram}\), \(N{=}4\) wheels)}
 \label{tab:motor_torque}
 \setlength{\tabcolsep}{8pt}
 \begin{tabular}{@{}llll@{}}
@@ -134,47 +139,47 @@ Drive motor sizing was finalized from traction and step-climbing analyses.
 \textbf{Load case} & \textbf{Expression} & \textbf{Value} & \textbf{Note} \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Traction model}} \\[2pt]
-Rolling resistance   
-  & $F_\mathrm{roll} = C_{rr}\,mg$                        
-  & \SI{73.6}{\newton}   
+Rolling resistance
+  & $F_\mathrm{roll} = C_{rr}\,mg$
+  & \SI{73.6}{\newton}
   & $C_{rr}=0.10$ \\
-Grade force          
-  & $F_\mathrm{grade} = mg\sin\alpha$                     
-  & \SI{190.4}{\newton}  
+Grade force
+  & $F_\mathrm{grade} = mg\sin\alpha$
+  & \SI{190.4}{\newton}
   & $\alpha=\ang{15}$ \\
-Acceleration force   
-  & $F_\mathrm{acc} = ma$                                 
-  & \SI{75.0}{\newton}   
+Acceleration force
+  & $F_\mathrm{acc} = ma$
+  & \SI{75.0}{\newton}
   & $a=\SI{1}{\metre\per\second\squared}$ \\
-Total traction force 
-  & $F_\mathrm{tot} = F_\mathrm{acc}+F_\mathrm{roll}+F_\mathrm{grade}$ 
-  & \SI{339.0}{\newton}  
+Total traction force
+  & $F_\mathrm{tot} = F_\mathrm{acc}+F_\mathrm{roll}+F_\mathrm{grade}$
+  & \SI{339.0}{\newton}
   & \\
-Wheel torque         
-  & $\tau_\mathrm{wheel} = F_\mathrm{tot}\,r/N$           
-  & \SI{12.7}{\newton\metre}  
+Wheel torque
+  & $\tau_\mathrm{wheel} = F_\mathrm{tot}\,r/N$
+  & \SI{12.7}{\newton\metre}
   & per wheel \\
-\textbf{Rated requirement} 
-  & $\tau_\mathrm{rated} = \tau_\mathrm{wheel}\,k_s/\eta$ 
-  & \textbf{\SI{23.8}{\newton\metre}} 
+\textbf{Rated requirement}
+  & $\tau_\mathrm{rated} = \tau_\mathrm{wheel}\,k_s/\eta$
+  & \textbf{\SI{23.8}{\newton\metre}}
   & $k_s{=}1.5,\;\eta{=}0.8$ \\[4pt]
 \multicolumn{4}{@{}l}{\textit{Step-climbing model}} \\[2pt]
-Front wheel load     
-  & $W_\mathrm{front} = mg/N$                             
-  & \SI{183.9}{\newton}  
+Front wheel load
+  & $W_\mathrm{front} = mg/N$
+  & \SI{183.9}{\newton}
   & 50\,\% front share, 2 wheels \\
-Step torque          
-  & $\tau_\mathrm{step}(h) 
-    = W_\mathrm{front}\,r\,\dfrac{\sqrt{2rh-h^2}}{r-h}$  
-  & ---                  
+Step torque
+  & $\tau_\mathrm{step}(h)
+    = W_\mathrm{front}\,r\,\dfrac{\sqrt{2rh-h^2}}{r-h}$
+  & ---
   & \\
 Max obstacle (nominal)
-  & $\tau_\mathrm{step}(h^*) = \SI{40}{\newton\metre}$   
-  & $h^* \approx \SI{127}{\milli\metre}$  
+  & $\tau_\mathrm{step}(h^*) = \SI{40}{\newton\metre}$
+  & $h^* \approx \SI{127}{\milli\metre}$
   & $0.85\,r$ \\
-Max obstacle (peak)  
+Max obstacle (peak)
   & $\tau_\mathrm{step}(h^{**}) = \SI{120}{\newton\metre}$
-  & $h^{**} \approx \SI{148}{\milli\metre}$ 
+  & $h^{**} \approx \SI{148}{\milli\metre}$
   & $0.99\,r$ \\
 \bottomrule
 \end{tabular}
