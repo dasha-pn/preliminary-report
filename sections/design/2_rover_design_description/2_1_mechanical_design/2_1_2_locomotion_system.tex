@@ -62,31 +62,6 @@
 \end{tikzpicture}
 \caption{Step-climbing geometry with obstacle height $h$ and wheel radius $r$.}
 \label{fig:step_geom}
-<<<<<<< des/2_1_3_wheel_design
-\vspace{-0.5\baselineskip}
-\end{wrapfigure}
-
-Drive motor selection was based on two parallel analyses.
-First, a traction model accounting for rover mass, rolling
-resistance of Mars~yard terrain, and a \ang{15} slope yields
-a required wheel torque of approximately \SI{12}{\newton\metre}
-per wheel at \SI{1}{\metre\per\second} with \SI{1}{\second}
-acceleration time. Applying a safety factor of $k_s = 1.5$ and
-assuming drivetrain efficiency of $\eta = 0.8$ gives a rated
-motor requirement of approximately \SI{23.8}{\newton\metre}.
-Second, a step-climbing torque analysis was performed, relating
-required wheel torque to obstacle height for a wheel radius of
-\SI{150}{\milli\metre}; this sets an upper bound of approximately
-\SI{40}{\newton\metre} for the maximum obstacle height of
-$h^* \approx \SI{127}{\milli\metre}$ (${\approx}\,85\%$ of wheel
-radius). Based on these results, the \mbox{DM-J10010L-2EC} hub
-motor was selected, providing \SI{40}{\newton\metre} nominal and
-\SI{120}{\newton\metre} peak torque at \SI{48}{\volt} ---
-satisfying both the traction and obstacle-climbing requirements
-with adequate margin. To simplify logistics and electronics
-development, the same motor model is used for wheel drive and the shoulder joints of the
-manipulator arm.
-=======
 \end{subfigure}\hfill
 \begin{subfigure}[t]{0.49\linewidth}
 \centering
@@ -152,7 +127,6 @@ All calculations in this subsection are approximate engineering estimates used f
   \item \textbf{Standardization:} the same motor class is used for
   wheel drive, steering rotation, and manipulator shoulder joints.
 \end{itemize}
->>>>>>> main
 
 
 \begin{table}[h!]
