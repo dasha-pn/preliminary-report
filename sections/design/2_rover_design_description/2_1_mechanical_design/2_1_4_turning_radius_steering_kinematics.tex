@@ -1,8 +1,33 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Suspension
+% Requirements: REQ-FUN-030
+% Status: [in-progress]
 
 % Placeholder content for sections/design/2/2_1/2_1_3_turning_radius_steering_kinematics.tex
 
-[Add content for this subsection.]
+Each wheel can rotate independently through 360° under software control. The angular position of each wheel is determined by an absolute encoder integrated into the steering mechanism. Wheels can be positioned such that the rover rotates about its own axis, achieving a minimum turning radius of approximately 700 mm.
+
+Detailed kinematic derivations, including the formal Ackermann steering model and control constraints, will be added in a later revision of this subsection.
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[t]{0.49\linewidth}
+		\centering
+		\fbox{\parbox[c][5.0cm][c]{0.92\linewidth}{\centering
+			Placeholder for Ackermann kinematics diagram of the rover
+		}}
+		\caption{Ackermann steering kinematics of the rover (placeholder)}
+		\label{fig:rover_ackermann_kinematics_placeholder}
+	\end{subfigure}\hfill
+	\begin{subfigure}[t]{0.49\linewidth}
+		\centering
+		\fbox{\parbox[c][5.0cm][c]{0.92\linewidth}{\centering
+			Placeholder for lateral (crab) rover motion image
+		}}
+		\caption{Rover lateral motion with 360-degree wheel steering (placeholder)}
+		\label{fig:rover_crab_motion_placeholder}
+	\end{subfigure}
+	\caption{Steering kinematics and lateral motion views (placeholders).}
+	\label{fig:rover_steering_motion_placeholders}
+\end{figure}
+
