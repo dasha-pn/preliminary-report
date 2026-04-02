@@ -43,10 +43,13 @@
 На початку кожного файлу `sections/design/*.tex` є міні-контракт:
 
 - `Teams`
-- `Requirements`
+- `Requirement note`
 - `Status`
 
 Не видаляйте цей блок. Оновлюйте поля по мірі прогресу.
+
+Важливо: у тексті підсекції **не потрібно** вручну перелічувати `REQ-*`.
+Примітку з номерами вимог для секції додає lead окремо.
 
 ## Правила для PR
 
@@ -57,11 +60,15 @@
    - `DES <subsection-id>: short title`
    - приклад: `DES 5.5: link performance analysis`
 3. У description PR вкажи:
-   - які `REQ-*` закриті
+   - що саме оновлено у підсекції (коротко, по суті)
    - які крос-посилання додані/оновлені
    - що ще лишилось (якщо є)
    - додай скріншот скопільованої секції, щоб було зручно рев'ювити твою секцію
-4. Новий PR створюємо як **Draft**. Після перевірки тімлід переводить його з Draft у Ready for review.
+4. Стиль контенту в subsection:
+   - короткі булети замість довгих абзаців
+   - без зайвої "води" та без детального опису куплених деталей
+   - використовуй спрощені назви компонентів; якщо модель не вибрана, пиши `TBD`
+5. Новий PR створюємо як **Draft**. Після перевірки тімлід переводить його з Draft у Ready for review.
 
 #### Приклад description / коментаря до PR (Markdown)
 
@@ -72,9 +79,10 @@
 - Updated subsection: `sections/design/<chapter>/<section>/<subsection>/<file>.tex`
 - Added/updated: <short summary of changes>
 
-## Closed Requirements
-- REQ-XXX-001
-- REQ-XXX-002
+## Content Style Check
+- [x] Short bullet-based writing
+- [x] No explicit `REQ-*` mentions in subsection text
+- [x] Simplified component names used (`TBD` if model not finalized)
 
 ## Cross-references
 - Added/updated references to: `Section X.Y`, `Table Z`, `Figure N`
@@ -154,10 +162,12 @@ git push
 
 ## Мінімальний чекліст перед пушем
 
-1. Заповнені `Teams`, `Requirements` і `Status` у tiny contract.
+1. Заповнені `Teams`, `Requirement note` і `Status` у tiny contract.
 2. Немає заглушок виду `[Add content for this subsection.]` у твоєму файлі.
-3. Є хоча б одна явна згадка `REQ-*` у тексті підсекції (або таблиці/рисунку).
+3. Немає явних згадок `REQ-*` у тексті підсекції (якщо це не окреме погоджене виключення).
 4. Документ компілюється локально.
+5. Текст переважно у форматі коротких булетів; довгі абзаци розбиті.
+6. Детальні описи куплених деталей прибрані, залишена тільки технічно потрібна аналітика.
 
 ## Компіляція
 
