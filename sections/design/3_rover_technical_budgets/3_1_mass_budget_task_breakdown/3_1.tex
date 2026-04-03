@@ -1,8 +1,194 @@
 % Tiny contract
-% Teams: [team-name]
-% Requirements: [REQ-*]
-% Status: [draft|in-progress|done]
+% Teams: Suspension, Arm, Electronics, Science
+% Requirements: REQ-GEN-040
+% Status: [in-progress]
 
-% Placeholder content for sections/design/3/3_1/3_1.tex
+\begin{table}[H]
+\centering
+\caption{Rover mass budget -- mobile platform (Suspension), preliminary estimate (expected variation: $\pm20\%$)}
+\label{tab:mass_budget_mobile_platform}
+\sisetup{
+  group-separator      = {\,},
+  group-minimum-digits = 4,
+  round-mode           = places,
+  round-precision      = 1
+}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}
+  l
+  S[table-format=2.0]
+  S[table-format=5.0]
+  S[table-format=2.1]
+  @{}}
+\toprule
+\textbf{Component} &
+\textbf{Qty} &
+{\textbf{Mass} (\si{\gram})} &
+{\textbf{Mass} (\si{\kilo\gram})} \\
+\midrule
 
-[Add content for this subsection.]
+%% ── Load-bearing frame ──────────────────────────────
+\multicolumn{4}{@{}l}{\textit{Load-bearing frame}} \\[2pt]
+
+Frame profiles and corner brackets
+  & {---} & 9000 & 9.0 \\
+Chassis structure
+  & {---} & 8100 & 8.1 \\[4pt]
+
+%% ── Suspension ──────────────────────────────────────
+\multicolumn{4}{@{}l}{\textit{Suspension}} \\[2pt]
+
+Rocker arms
+  & 2 & 2000 & 2.0 \\
+Central axis
+  & 1 & 1000 & 1.0 \\[4pt]
+
+%% ── Wheel assemblies ────────────────────────────────
+\multicolumn{4}{@{}l}{\textit{Wheel assemblies}} \\[2pt]
+
+Wheel hub and mounting brackets
+  & 20 & 2400 & 2.4 \\
+Wheel disc
+  & 4 & 1100 & 1.1 \\
+Tyres, TPU\(^\dagger\)
+  & 4 & 5200 & 5.2 \\[4pt]
+
+%% ── Actuators ───────────────────────────────────────
+\multicolumn{4}{@{}l}{\textit{Actuators}} \\[2pt]
+
+Drive motor, \mbox{DM-J10010L-2EC}
+  & 4 & 5500 & 5.5 \\
+Wheel steering motor, \mbox{DAMIAO DM-J4340-2EC}
+  & 4 & 1400 & 1.4 \\
+
+\midrule
+\textbf{Total (mobile platform)}
+  & & \textbf{35700} & \textbf{35.7} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Rover mass budget -- manipulator arm (preliminary estimate)}
+\label{tab:mass_budget_arm_placeholder}
+\sisetup{
+  group-separator      = {\,},
+  group-minimum-digits = 4,
+  round-mode           = places,
+  round-precision      = 1
+}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}
+  l
+  l
+  l
+  l
+  @{}}
+\toprule
+\textbf{Component} &
+\textbf{Qty} &
+\textbf{Mass (g)} &
+\textbf{Mass (kg)} \\
+\midrule
+Joint motors                              & 6 & 3966 & 4.0 \\
+Carbon-fiber tubes set                    & 1 (1 m set) & 1885 & 1.9 \\
+Depth camera class                        & 1 & 120 & 0.12 \\
+Wiring and cables                         & 1 set & 500 & 0.5 \\
+Gripper                                   & 1 & 800 & 0.8 \\
+3D-printed mounts and joint parts         & 1 set & 1500 & 1.5 \\
+\midrule
+\textbf{Total (arm subsystem)}
+  & & \textbf{8771} & \textbf{8.8} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Rover mass budget -- electronics and power (preliminary estimate)}
+\label{tab:mass_budget_electronics_placeholder}
+\sisetup{
+  group-separator      = {\,},
+  group-minimum-digits = 4,
+  round-mode           = places,
+  round-precision      = 1
+}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}
+  l
+  l
+  l
+  l
+  @{}}
+\toprule
+\textbf{Component} &
+\textbf{Qty} &
+\textbf{Mass (g)} &
+\textbf{Mass (kg)} \\
+\midrule
+Main compute module & 1 & 1000 & 1.0 \\
+Stereo camera                       & 1 & 80 & 0.08 \\
+ToF camera                          & 3 & 150 & 0.15 \\
+LiDAR                               & 1 & 105 & 0.105 \\
+Battery packs                       & 4 & 12000 & 12.0 \\
+Wiring, cables, buck converters, etc & 1 set & 1000 & 1.0 \\
+\midrule
+\textbf{Total (electronics subsystem)}
+  & & \textbf{13335} & \textbf{13.3} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Rover mass budget -- science station (Science team placeholder)}
+\label{tab:mass_budget_science_placeholder}
+\sisetup{
+  group-separator      = {\,},
+  group-minimum-digits = 4,
+  round-mode           = places,
+  round-precision      = 1
+}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}
+  l
+  S[table-format=2.0]
+  l
+  l
+  @{}}
+\toprule
+\textbf{Component} &
+\textbf{Qty} &
+\textbf{Mass (g)} &
+\textbf{Mass (kg)} \\
+\midrule
+Drill assembly                       & {---} & TBD & TBD \\
+Weighing containers and mechanism    & {---} & TBD & TBD \\
+Analyzers module set                 & {---} & TBD & TBD \\
+Sample transfer and sealing hardware & {---} & TBD & TBD \\
+Science station harness and mounts   & {---} & TBD & TBD \\
+\midrule
+\textbf{Total (science station)}
+  & & \textbf{TBD} & \textbf{TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Per-task rover configuration mass summary}
+\label{tab:mass_budget_per_task_configuration}
+\begin{tabular}{@{}L{3.4cm} C{1.8cm} L{4.2cm} L{5.2cm}@{}}
+\toprule
+\textbf{Task} & \textbf{Arm equipped} & \textbf{Task-specific payload/tool} & \textbf{Total mass (kg)} \\
+\midrule
+Navigation task   & No  & None & $35.7 + M_{\mathrm{elec}}$ \\
+Maintenance task  & Yes & None & $35.7 + M_{\mathrm{elec}} + M_{\mathrm{arm}}$ \\
+Exploration task  & No  & None & $35.7 + M_{\mathrm{elec}} + M_{\mathrm{exp}}$ \\
+Deep sampling task & Yes & Deep-sampling end-effector & $35.7 + M_{\mathrm{elec}} + M_{\mathrm{arm}} + M_{\mathrm{deep}}$ \\
+Astrobiology task & Yes & Astrobiology end-effector & $35.7 + M_{\mathrm{elec}} + M_{\mathrm{arm}} + M_{\mathrm{astro}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
