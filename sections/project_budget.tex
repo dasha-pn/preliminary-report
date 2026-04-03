@@ -29,16 +29,16 @@ budget and current expenditure status.
     \label{tab:budget_summary}
     \begin{tabular}{L{5cm} R{2.5cm} R{2.5cm} R{2.5cm}}
         \toprule
-        \textbf{Category}          & \textbf{Budget (EUR)} & \textbf{Spent (EUR)} & \textbf{Remaining (EUR)} \\
+        \textbf{Category} & \textbf{Budget (EUR)} & \textbf{Spent (EUR)} & \textbf{Remaining (EUR)} \\
         \midrule
-        Rover hardware             & [X,XXX] & [X,XXX] & [X,XXX] \\
-        Drone hardware             & [X,XXX] & [X,XXX] & [X,XXX] \\
-        Software / licences        & [X,XXX] & [X,XXX] & [X,XXX] \\
-        Manufacturing / machining  & [X,XXX] & [X,XXX] & [X,XXX] \\
-        Non-engineering costs      & [X,XXX] & [X,XXX] & [X,XXX] \\
-        Contingency (10\,\%)       & [X,XXX] & ---      & [X,XXX] \\
+        Rover hardware            & 18027.99 & 2915.97 & 15112.02 \\
+        Drone hardware            & 600.00   & 487.25  & 112.75 \\
+        Software / licences       & 500.00   & 0.00    & 500.00 \\
+        Manufacturing / machining & 500.00   & 0.00    & 500.00 \\
+        Non-engineering costs     & 2451.59  & 0.00    & 2451.59 \\
+        Contingency        & 1800.00  & 0.00    & 1800.00 \\
         \midrule
-        \textbf{Total}             & \textbf{[X,XXX]} & \textbf{[X,XXX]} & \textbf{[X,XXX]} \\
+        \textbf{Total}            & \textbf{23879.58} & \textbf{3403.22} & \textbf{20476.36} \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -52,15 +52,15 @@ budget and current expenditure status.
     \label{tab:budget_sources}
     \begin{tabular}{L{5cm} R{2.5cm} L{5cm}}
         \toprule
-        \textbf{Source}              & \textbf{Amount (EUR)} & \textbf{Notes} \\
+        \textbf{Source} & \textbf{Amount (EUR)} & \textbf{Notes} \\
         \midrule
-        University grant             & [X,XXX] & \\
-        Sponsorship -- [Sponsor 1]   & [X,XXX] & \\
-        Sponsorship -- [Sponsor 2]   & [X,XXX] & \\
-        Team contributions           & [X,XXX] & \\
-        Other                        & [X,XXX] & \\
+        Ukrainian Catholic University           & [X,XXX] & \\
+        Nova Ukraine & [X,XXX] & \\
+        SoftServe & [X,XXX] & \\
+        Eleks         & [X,XXX] & \\
+        Infenion                      & [X,XXX] & \\
         \midrule
-        \textbf{Total}               & \textbf{[X,XXX]} & \\
+        \textbf{Total}             & \textbf{[X,XXX]} & \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -71,78 +71,96 @@ budget and current expenditure status.
 Column \textbf{Type} indicates: \textbf{COTS} -- component off the shelf,
 \textbf{Custom} -- team-manufactured item.
 
-\begin{longtable}{C{0.7cm} L{3.0cm} C{1.8cm} C{1.2cm} R{1.6cm} R{1.8cm} L{1.7cm}}
+\begin{longtable}{C{0.9cm} L{3.2cm} C{1.8cm} C{1.4cm} R{2cm} R{2cm} L{2cm}}
     \caption{Rover major items budget}
     \label{tab:rover_items} \\
     \toprule
     \textbf{ID} & \textbf{Item / Component} & \textbf{Subsystem} & \textbf{Type}
-        & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
+    & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
     \midrule
     \endfirsthead
-    \multicolumn{7}{c}{\small\itshape (continued from previous page)} \\
+
+    \multicolumn{7}{c}{\small\itshape Continued from previous page} \\
     \toprule
     \textbf{ID} & \textbf{Item / Component} & \textbf{Subsystem} & \textbf{Type}
-        & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
+    & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
     \midrule
     \endhead
+
     \bottomrule
     \endlastfoot
 
-    % Chassis / Suspension
-    BR-01 & [Chassis frame]        & Suspension  & Custom & [X.XX] & [X.XX] & Planned \\
-    BR-02 & [Wheel (×6)]           & Suspension  & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BR-03 & [Drive motor (×6)]     & Suspension  & COTS   & [X.XX] & [X.XX] & Ordered \\
-    % Arm
-    BR-10 & [Arm servo (×N)]       & Arm         & COTS   & [X.XX] & [X.XX] & Planned \\
-    BR-11 & [Arm structural parts] & Arm         & Custom & [X.XX] & [X.XX] & Planned \\
-    % Science
-    BR-20 & [Science sensor]       & Science     & COTS   & [X.XX] & [X.XX] & Planned \\
-    % Electronics
-    BR-30 & [Main computer]        & Electronics & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BR-31 & [Battery pack]         & Electronics & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BR-32 & [PCB (custom)]         & Electronics & Custom & [X.XX] & [X.XX] & Design \\
-    % Navigation
-    BR-40 & [Camera]               & Navigation  & COTS   & [X.XX] & [X.XX] & Planned \\
-    BR-41 & [GPS module]           & Navigation  & COTS   & [X.XX] & [X.XX] & Planned \\
-    % Ground station
-    BR-50 & [Radio module]         & GS          & COTS   & [X.XX] & [X.XX] & Ordered \\
-    % Add all items ...
-    \midrule
-    \multicolumn{5}{r}{\textbf{Rover subtotal}} & \textbf{[X,XXX]} & \\
+    BR-01 & SteadyWin GIM8115-36 Planetary Reducer & Arm & COTS & 262.11 & 2096.91 & Paid \\
+    BR-02 & DAMIAO DM-J4340-2EC Motor & Arm & COTS & 166.01 & 664.02 & Paid \\
+    BR-03 & RadioMaster RP1 V2 ExpressLRS 2.4 & Arm & COTS & 122.32 & 122.32 & Paid \\
+    BR-04 & Raspberry Pi 4 & Arm & COTS & 87.37 & 87.37 & Planned to buy \\
 
+    BR-05 & NVIDIA Orin NX 16GB development set & Navigation & COTS & 1048.45 & 1048.45 & Planned to buy \\
+    BR-06 & Stereo + RGB camera (OAK-P Pro) & Navigation & COTS & 532.09 & 532.09 & Given by university \\
+    BR-07 & LiDAR (RPLIDAR-S2) & Navigation & COTS & 265.61 & 265.61 & Planned to buy \\
+    BR-08 & ToF camera (Sipeed MaixSense A010) & Navigation & COTS & 23.59 & 94.36 & Planned to buy \\
+    BR-09 & Sipeed MaixSense A010/A075V RGBD & Navigation & COTS & 29.96 & 29.96 & Paid \\
+    BR-10 & USB 3.0 Mobile Hard Drive Cable & Navigation & COTS & 2.76 & 2.76 & Paid \\
+
+    BR-11 & Arducam 2.3MP AR0234 & Ground station & COTS & 121.66 & 243.33 & Planned to buy \\
+    BR-12 & Master camera & Ground station & COTS & 225.96 & 225.96 & Planned to buy \\
+    BR-13 & Monitor 24'' Xiaomi G24i 2026 & Ground station & COTS & 94.55 & 189.10 & Planned to buy \\
+    BR-14 & Case & Ground station & COTS & 198.26 & 198.26 & Planned to buy \\
+    BR-15 & WiFi peripherals & Ground station & COTS & 0.00 & 0.00 & Planned to buy \\
+    BR-16 & Mini computer & Ground station & COTS & 356.86 & 356.86 & Planned to buy \\
+
+    BR-17 & Aluminium profile 80x40 & Suspension & COTS & 17.84 & 35.69 & Planned to buy \\
+    BR-18 & DAMIAO DM-J10010L-2EC Motor & Suspension & COTS & 200.95 & 1004.77 & Planned to buy \\
+    BR-19 & Aluminium sheet 5mm (1 sq.m) & Suspension & COTS & 84.75 & 84.75 & Planned to buy \\
+    BR-20 & Carriage assembly hardware & Suspension & COTS & 99.13 & 99.13 & Planned to buy \\
+    BR-21 & Differential parts (set) & Suspension & COTS & 59.48 & 59.48 & Planned to buy \\
+    BR-22 & TPU plastic & Suspension & COTS & 1605.87 & 9635.21 & Planned to buy \\
+
+    BR-23 & Battery (48V $\cdot$ 12Ah) & Electronics & COTS & 190.33 & 951.63 & Planned to buy \\
+
+    \midrule
+    \multicolumn{5}{r}{\textbf{Rover subtotal}} & \textbf{18027.99} & \\
 \end{longtable}
 
 \subsection{Drone Detailed Budget}
 \label{subsec:drone_detailed_budget}
 
-\begin{longtable}{C{0.7cm} L{4cm} C{1.2cm} R{1.8cm} R{2cm} L{2cm}}
+\begin{longtable}{C{0.9cm} L{4.5cm} C{1.4cm} R{2cm} R{2cm} L{2cm}}
     \caption{Drone major items budget}
     \label{tab:drone_items} \\
     \toprule
     \textbf{ID} & \textbf{Item / Component} & \textbf{Type}
-        & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
+    & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
     \midrule
     \endfirsthead
-    \multicolumn{6}{c}{\small\itshape (continued from previous page)} \\
+
+    \multicolumn{6}{c}{\small\itshape Continued from previous page} \\
     \toprule
     \textbf{ID} & \textbf{Item / Component} & \textbf{Type}
-        & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
+    & \textbf{Unit cost (EUR)} & \textbf{Total cost (EUR)} & \textbf{Status} \\
     \midrule
     \endhead
+
     \bottomrule
     \endlastfoot
 
-    BD-01 & [Frame / structure]      & Custom & [X.XX] & [X.XX] & Planned \\
-    BD-02 & [Motor (×N)]             & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BD-03 & [Propeller (×N)]         & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BD-04 & [Flight controller]      & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BD-05 & [Battery (LiPo)]         & COTS   & [X.XX] & [X.XX] & Ordered \\
-    BD-06 & [Camera / payload]       & COTS   & [X.XX] & [X.XX] & Planned \\
-    BD-07 & [Radio / telemetry link] & COTS   & [X.XX] & [X.XX] & Planned \\
-    % Add all items ...
-    \midrule
-    \multicolumn{4}{r}{\textbf{Drone subtotal}} & \textbf{[X,XXX]} & \\
+    BD-01 & Raspberry Pi 5 & COTS & 172.12 & 172.12 & Received \\
+    BD-02 & Camera Arducam IMX708 12MP HD & COTS & 38.35 & 38.35 & Received \\
+    BD-03 & RadioMaster RP1 V2 ExpressLRS & COTS & 16.59 & 16.59 & Received \\
+    BD-04 & MicoAir MTF-02P AUTO / MTF-02 & COTS & 14.44 & 14.44 & Planned to buy \\
+    BD-05 & Holybro Pixhawk 6C & COTS & 146.27 & 146.27 & Paid \\
+    BD-06 & Anti-vibration Rubber & COTS & 4.28 & 4.28 & Paid \\
+    BD-07 & Radio V5 Telemetry & COTS & 49.33 & 49.33 & Paid \\
+    BD-08 & APM PIXHAWK Power Module & COTS & 5.29 & 5.29 & Paid \\
+    BD-09 & Hobbywing 5A UBEC V2 & COTS & 10.77 & 10.77 & Received \\
+    BD-10 & Pixhawk PX4 Buzzer & COTS & 1.60 & 1.60 & Received \\
+    BD-11 & Pixhawk Safety Switch & COTS & 1.77 & 1.77 & Received \\
+    BD-12 & Two Color Indicator Light & COTS & 3.38 & 3.38 & Planned to buy \\
+    BD-13 & Kingston microSDXC 64GB & COTS & 10.90 & 10.90 & Planned to buy \\
+    BD-14 & 3DR Radio V5 Telemetry 433MHz & COTS & 12.20 & 12.20 & Planned to buy \\
 
+    \midrule
+    \multicolumn{4}{r}{\textbf{Drone subtotal}} & \textbf{487.25} & \\
 \end{longtable}
 
 \subsection{Non-Engineering Costs}
@@ -154,16 +172,15 @@ Column \textbf{Type} indicates: \textbf{COTS} -- component off the shelf,
     \label{tab:non_eng}
     \begin{tabular}{L{5cm} R{2.5cm} L{4cm}}
         \toprule
-        \textbf{Item}                      & \textbf{Cost (EUR)} & \textbf{Notes} \\
+        \textbf{Item} & \textbf{Cost (EUR)} & \textbf{Notes} \\
         \midrule
-        Travel to competition              & [X,XXX] & flights, train \\
-        Accommodation                      & [X,XXX] & hotel / hostel \\
-        Shipping of rover and equipment    & [X,XXX] & freight \\
-        Team merchandise / uniforms        & [X,XXX] & \\
-        Registration / entry fee           & [X,XXX] & \\
-        Miscellaneous                      & [X,XXX] & \\
+        Residence                    & 866.20 & 20 persons \\
+        Travel to competition        & 606.40 & transport to Poland \\
+        Food                         & 346.60 & 3 meals per day \\
+        Delivery of rover            & 25.99  & - \\
+        Travel from competition      & 606.40 & transport to Ukraine \\
         \midrule
-        \textbf{Total non-engineering}     & \textbf{[X,XXX]} & \\
+        \textbf{Total non-engineering} & \textbf{2451.59} & \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -171,13 +188,14 @@ Column \textbf{Type} indicates: \textbf{COTS} -- component off the shelf,
 \subsection{Budget Analysis}
 \label{subsec:budget_analysis}
 
-[Provide a narrative analysis of the budget. Discuss:
-\begin{itemize}
-    \item The rationale behind the budget allocation between subsystems.
-    \item The balance between COTS and custom-made components and how this
-          reflects on cost efficiency.
-    \item Prudence measures taken (e.g.\ reusing existing components,
-          negotiating with sponsors, using open-source software).
-    \item Contingency planning and reserve budget.
-\end{itemize}
-]
+The project budget is dominated by rover hardware, which accounts for the largest share of the total cost (18027.99~EUR), reflecting the system’s complexity and its central role in mission execution. High-cost components are concentrated in critical subsystems, including actuation (motors and reducers), perception (LiDAR and cameras), and onboard computing (NVIDIA Orin NX). These components were selected based on their performance and reliability, which are essential for autonomous operation in challenging environments.
+
+The drone subsystem is intentionally kept minimal (600.00~EUR total budget) and includes only essential components required for complementary aerial functionality. This design decision reduces overall costs while still extending the system’s operational capabilities.
+
+The budget demonstrates a deliberate preference for commercial off-the-shelf (COTS) components. This approach minimizes development time, reduces integration risk, and ensures compatibility with widely supported hardware ecosystems. At the same time, cost efficiency is achieved by carefully selecting components with a strong price-to-performance ratio and avoiding unnecessary over-specification.
+
+Cost-saving measures are further evident in the use of externally provided components, such as the stereo camera system, which was supplied by the university. Additionally, several subsystems (e.g., ground station and suspension elements) are designed with simple, modular components to reduce manufacturing complexity and cost.
+
+Non-engineering costs (2451.59~EUR) are explicitly separated and calculated based on team size and logistics, ensuring that operational expenses are realistically accounted for. This separation improves budget transparency and allows for clearer tracking of technical versus logistical expenditures.
+
+A contingency reserve of 1800.00~EUR is included to mitigate risks associated with unforeseen expenses, such as component replacement, price fluctuations, or logistical adjustments. The reserve is currently unspent, providing financial flexibility for the final stages of the project.
